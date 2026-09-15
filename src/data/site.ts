@@ -42,11 +42,13 @@ export const social: { label: string; href: string; icon: 'instagram' | 'faceboo
   { label: 'LinkedIn', href: '', icon: 'linkedin' },
 ];
 
+/* Η σειρά ταυτίζεται με τη σειρά που εμφανίζονται οι ενότητες στη σελίδα:
+   Hero → Φιλοσοφία → Υπηρεσίες → Προσέγγιση → Σχετικά → Τρόποι → FAQ → Επικοινωνία */
 export const nav = [
   { label: 'Αρχική', href: '#top' },
-  { label: 'Σχετικά', href: '#sxetika' },
   { label: 'Υπηρεσίες', href: '#ypiresies' },
   { label: 'Προσέγγιση', href: '#prosegisi' },
+  { label: 'Σχετικά', href: '#sxetika' },
   { label: 'Επικοινωνία', href: '#epikoinonia' },
 ] as const;
 

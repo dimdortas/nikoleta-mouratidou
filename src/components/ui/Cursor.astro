@@ -1,0 +1,123 @@
+---
+/**
+ * Λεπτός κύκλος που ακολουθεί τον κέρσορα, λίγο πίσω του.
+ * Το χρώμα του αλλάζει ανάλογα με το σημείο της σελίδας:
+ *   · ήρεμο ιβουάρ  → λαδί
+ *   · κρεμ ενότητες → βαθύ λαδί
+ *   · σκούρα ενότητα → φωτεινό λαδί
+ *   · πάνω σε σύνδεσμο / κουμπί / πεδίο → τερακότα, ελαφρώς μεγαλύτερος
+ *
+ * Καθαρά διακοσμητικό: δεν κρύβει τον πραγματικό κέρσορα, δεν πιάνει
+ * clicks και δεν εμφανίζεται σε αφή ή σε prefers-reduced-motion.
+ */
+---
+
+<div class="cursor" data-cursor-ring aria-hidden="true">
+  <span class="cursor__ring"></span>
+  <span class="cursor__dot"></span>
+</div>
+
+<style>
+  .cursor {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 90;
+    inline-size: 0;
+    block-size: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--dur-md) var(--ease-out-soft);
+    /* Η θέση δίνεται από το script μέσω --cursor-x / --cursor-y */
+    translate: var(--cursor-x, -100px) var(--cursor-y, -100px);
+    will-change: translate;
+  }
+
+  .cursor.is-visible {
+    opacity: 1;
+  }
+
+  .cursor__ring,
+  .cursor__dot {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    border-radius: var(--r-circle);
+    translate: -50% -50%;
+  }
+
+  .cursor__ring {
+    inline-size: var(--cursor-size, 34px);
+    block-size: var(--cursor-size, 34px);
+    border: 1px solid var(--cursor-color, var(--c-olive));
+    background-color: var(--cursor-fill, transparent);
+    transition:
+      inline-size var(--dur-md) var(--ease-out-soft),
+      block-size var(--dur-md) var(--ease-out-soft),
+      border-color var(--dur-md) var(--ease-out-soft),
+      background-color var(--dur-md) var(--ease-out-soft);
+  }
+
+  /* Μικρή κουκκίδα που δείχνει το ακριβές σημείο, χωρίς καθυστέρηση */
+  .cursor__dot {
+    inline-size: 3px;
+    block-size: 3px;
+    background-color: var(--cursor-color, var(--c-olive));
+    translate: calc(-50% + var(--dot-x, 0px)) calc(-50% + var(--dot-y, 0px));
+    transition: background-color var(--dur-md) var(--ease-out-soft);
+  }
+
+  /* ---------------- καταστάσεις ---------------- */
+
+  /* Κρεμ ενότητες — λίγο πιο βαθύ για να ξεχωρίζει */
+  .cursor[data-surface='cream'] {
+    --cursor-color: var(--c-olive-deep);
+  }
+
+  /* Σκούρα ενότητα (Θεραπευτική Προσέγγιση) */
+  .cursor[data-surface='deep'] {
+    --cursor-color: var(--c-olive-mist);
+  }
+
+  /* Πάνω σε κάτι που μπορείς να πατήσεις — η μία σαφής στιγμή τερακότα */
+  .cursor[data-active='true'] {
+    --cursor-color: var(--accent);
+    --cursor-size: 52px;
+    --cursor-fill: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  .cursor[data-surface='deep'][data-active='true'] {
+    --cursor-color: var(--c-terracotta-soft);
+    --cursor-fill: color-mix(in srgb, var(--c-terracotta-soft) 12%, transparent);
+  }
+
+  /* Πάνω σε πεδίο κειμένου: γίνεται λεπτή κάθετη γραμμή, όχι κύκλος */
+  .cursor[data-active='text'] {
+    --cursor-color: var(--accent);
+  }
+
+  .cursor[data-active='text'] .cursor__ring {
+    inline-size: 1px;
+    block-size: 26px;
+    border: 0;
+    border-radius: 0;
+    background-color: var(--cursor-color);
+  }
+
+  .cursor[data-active='text'] .cursor__dot {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      display: none;
+    }
+  }
+
+  /* Ποτέ σε συσκευές αφής */
+  @media (pointer: coarse), (hover: none) {
+    .cursor {
+      display: none;
+    }
+  }
+</style>

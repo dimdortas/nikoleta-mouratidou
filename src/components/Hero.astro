@@ -176,6 +176,13 @@ import { site, hero, cta } from '../data/site';
     margin-block-end: clamp(1.75rem, 4vw, 3rem);
   }
 
+  /* Η μοναδική γραμμή σε τερακότα στην αρχή της σελίδας — δίνει τον τόνο
+     χωρίς να τραβά το βλέμμα από την τυπογραφία. */
+  .hero__eyebrow::before {
+    background-color: var(--accent);
+    opacity: 1;
+  }
+
   .hero__name {
     font-size: var(--fs-display);
     line-height: var(--lh-display);
@@ -255,7 +262,7 @@ import { site, hero, cta } from '../data/site';
     position: absolute;
     inset-inline: 0;
     block-size: 40%;
-    background-color: var(--c-olive-deep);
+    background-color: var(--accent);
     animation: scroll-cue 3.4s var(--ease-in-out-soft) infinite;
   }
 

@@ -73,10 +73,12 @@ export function initHeader() {
 
   /* ---------- ενεργό link ---------- */
   const links = Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
+  /* Παρακολουθούμε ΚΑΙ το hero (#top), αλλιώς στην κορυφή της σελίδας
+     μένει ενεργό ό,τι ήταν τελευταίο. */
   const sections = links
     .map((l) => {
       const id = l.getAttribute('href');
-      return id && id !== '#top' ? document.querySelector<HTMLElement>(id) : null;
+      return id ? document.querySelector<HTMLElement>(id) : null;
     })
     .filter(Boolean) as HTMLElement[];
 

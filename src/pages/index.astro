@@ -10,6 +10,7 @@ import Formats from '../components/Formats.astro';
 import Faq from '../components/Faq.astro';
 import Contact from '../components/Contact.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import Cursor from '../components/ui/Cursor.astro';
 ---
 
 <BaseLayout>
@@ -27,11 +28,14 @@ import SiteFooter from '../components/SiteFooter.astro';
   </main>
 
   <SiteFooter />
+
+  <Cursor />
 </BaseLayout>
 
 <script>
   import { initMotion } from '../scripts/motion';
   import { initHeroArt } from '../scripts/hero-art';
+  import { initCursor } from '../scripts/cursor';
   import { initHeader } from '../scripts/header';
   import { initDisclosures } from '../scripts/disclosure';
   import { initForm } from '../scripts/form';
@@ -39,6 +43,7 @@ import SiteFooter from '../components/SiteFooter.astro';
   const boot = () => {
     initMotion();
     initHeroArt();
+    initCursor();
     initHeader();
     initDisclosures();
     initForm();

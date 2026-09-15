@@ -43,9 +43,19 @@
   --focus: var(--c-olive-deep);
 
   /* ---------- Typography ---------- */
-  --font-display: 'Bona Nova', 'Cocomat Pro', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-  --font-ui: 'Cocomat Pro', 'Manrope', 'Commissioner', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Bona Nova', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+
+  /* ΠΡΟΣΟΧΗ — μη βάλετε εδώ 'Cocomat Pro' χωρίς webfont άδεια.
+     Η Cocomat Pro TRIAL είναι εγκατεστημένη σε αρκετά μηχανήματα του
+     γραφείου. Όσο το όνομα υπάρχει στο stack, ο browser τη βρίσκει
+     ΤΟΠΙΚΑ και τη χρησιμοποιεί — με αποτέλεσμα:
+       · ο ιστότοπος να δείχνει διαφορετικός σε εσάς και στους επισκέπτες·
+       · η trial να έχει μόνο Regular/Bold, οπότε τα βάρη 500/600 πέφτουν
+         σε Regular και το κείμενο βγαίνει πολύ αχνό.
+     Όταν αποκτηθεί άδεια: ενεργοποιήστε τα @font-face στο fonts.css ΚΑΙ
+     βάλτε ξανά το 'Cocomat Pro' μπροστά από τη Manrope εδώ. */
+  --font-ui: 'Manrope', 'Commissioner', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
 
   /* Fluid scale — 390px → 1440px viewport */
   --fs-display: clamp(2.75rem, 1.1rem + 6.8vw, 7rem);
