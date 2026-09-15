@@ -221,11 +221,58 @@ smooth scroll απενεργοποιείται· το περιεχόμενο ε�
 
 ## Δημοσίευση
 
+### Τρέχον προσωρινό link (staging)
+
+**https://dimdortas.github.io/nikoleta-mouratidou/**
+
+Δημοσιεύεται από το branch `gh-pages`. Έχει σκόπιμα `noindex`, ώστε να μην
+μπει στη Google και να μην ανταγωνιστεί το κανονικό domain.
+
+Για νέα δημοσίευση μετά από αλλαγές:
+
+```bash
+npm run deploy:pages
+```
+
+Το `scripts/publish-pages.mjs` ανεβάζει το `dist/` μέσω του GitHub API με το
+`gh` — **δεν χρειάζεται τοπικό git** (βλ. σημείωση παρακάτω).
+
+> Το build για το Pages τρέχει με `BASE_PATH=/nikoleta-mouratidou`, επειδή το
+> project site σερβίρεται σε υποφάκελο. Το κανονικό build (`npm run build`)
+> παραμένει στη ρίζα — δεν χρειάζεται καμία αλλαγή για το τελικό domain.
+
+### Τελικό domain
+
 `npm run build` → στατικά αρχεία στο `dist/`. Ανεβαίνει ως έχει σε Netlify,
 Vercel, Cloudflare Pages ή οποιονδήποτε static host.
 
 - **Build command:** `npm run build`
 - **Publish directory:** `dist`
+
+Υπάρχει έτοιμο `netlify.toml` — στο app.netlify.com αρκεί «Add new site» →
+import από αυτό το repo. Καμία άλλη ρύθμιση.
+
+### Αυτόματη δημοσίευση (προαιρετικά)
+
+Στο `.github/deploy.yml.example` υπάρχει έτοιμο GitHub Actions workflow που
+χτίζει και δημοσιεύει σε κάθε push. Δεν μπήκε ενεργό επειδή το token του `gh`
+δεν έχει το scope `workflow`:
+
+```bash
+gh auth refresh -s workflow
+mkdir -p .github/workflows && mv .github/deploy.yml.example .github/workflows/deploy.yml
+# Settings → Pages → Source: "GitHub Actions"
+```
+
+### ⚠ Το git δεν λειτουργεί σε αυτό το μηχάνημα
+
+Υπάρχει μόνο το `/usr/bin/git` της Apple και δεν έχει γίνει αποδοχή της άδειας
+Xcode, οπότε κάθε εντολή git αποτυγχάνει. Γι' αυτό η δημοσίευση γίνεται μέσω
+API. Για να δουλέψει κανονικά το git:
+
+```bash
+sudo xcodebuild -license
+```
 
 ---
 
