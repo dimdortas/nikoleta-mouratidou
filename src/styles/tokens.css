@@ -1,0 +1,149 @@
+/* =============================================================
+   DESIGN TOKENS — Νικολέτα Ρ. Μουρατίδου
+   Colours sampled directly from logo.pdf / Front-card.pdf
+   ============================================================= */
+
+:root {
+  /* ---------- Colour: brand primitives (sampled) ---------- */
+  --c-cream: #e7e1d6; /* card / logo ground */
+  --c-ink: #302f2e; /* logotype charcoal */
+  --c-olive: #8a8b6d; /* circle stroke */
+  --c-olive-text: #807d65; /* subtitle olive-grey */
+  --c-olive-mist: #b6b39f; /* circle intersection fill */
+  --c-rule: #cac6b5; /* hairline divider */
+
+  /* ---------- Colour: derived ---------- */
+  --c-ivory: #faf8f4; /* page ground — keeps the site off "all beige" */
+  --c-ivory-warm: #f3efe6;
+  --c-olive-deep: #5f6149;
+  --c-forest: #333527; /* dark section ground */
+  --c-forest-soft: #434633;
+  --c-terracotta: #95523a; /* restrained accent only — AA on cream & ivory */
+  --c-terracotta-soft: #c08268; /* μόνο πάνω σε σκούρο φόντο */
+
+  /* ---------- Semantic ---------- */
+  --bg: var(--c-ivory);
+  --bg-alt: var(--c-cream);
+  --bg-deep: var(--c-forest);
+
+  --text: var(--c-ink);
+  /* Οι αποχρώσεις κειμένου είναι σκουρότερες από τις έντυπες ώστε να
+     περνούν WCAG AA (≥4.5:1) και πάνω στο κρεμ #E7E1D6.
+     Οι αυθεντικές τιμές της ταυτότητας παραμένουν ως --c-* primitives. */
+  --text-muted: #5c5850;
+  --text-soft: #63614c;
+  --text-on-deep: #ece7dc;
+  --text-on-deep-muted: #a8a894;
+
+  --line: var(--c-rule);
+  --line-soft: rgba(48, 47, 46, 0.1);
+  --line-on-deep: rgba(236, 231, 220, 0.18);
+
+  --accent: var(--c-terracotta);
+  --focus: var(--c-olive-deep);
+
+  /* ---------- Typography ---------- */
+  --font-display: 'Bona Nova', 'Cocomat Pro', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Cocomat Pro', 'Manrope', 'Commissioner', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Fluid scale — 390px → 1440px viewport */
+  --fs-display: clamp(2.75rem, 1.1rem + 6.8vw, 7rem);
+  --fs-h1: clamp(2.375rem, 1.05rem + 5.6vw, 5.5rem);
+  --fs-h2: clamp(2rem, 1.1rem + 3.8vw, 4rem);
+  --fs-h3: clamp(1.5rem, 1.05rem + 1.9vw, 2.375rem);
+  --fs-h4: clamp(1.1875rem, 1rem + 0.8vw, 1.625rem);
+  --fs-lead: clamp(1.0625rem, 0.97rem + 0.42vw, 1.3125rem);
+  --fs-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  --fs-small: 0.9375rem;
+  --fs-label: 0.75rem;
+  --fs-index: clamp(0.8125rem, 0.75rem + 0.25vw, 0.9375rem);
+
+  --lh-display: 1.02;
+  --lh-heading: 1.1;
+  --lh-title: 1.22;
+  --lh-body: 1.75;
+  --lh-tight: 1.4;
+
+  --ls-display: -0.022em;
+  --ls-heading: -0.014em;
+  --ls-label: 0.16em;
+  --ls-body: 0.004em;
+
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 2.5rem;
+  --sp-8: 3rem;
+  --sp-9: 4rem;
+  --sp-10: 5rem;
+  --sp-11: 6.5rem;
+  --sp-12: 8rem;
+
+  /* Vertical rhythm of sections — generous on desktop */
+  --section-y: clamp(5rem, 3.2rem + 7.6vw, 11.5rem);
+  --section-y-lg: clamp(6rem, 3rem + 12vw, 15rem);
+
+  /* ---------- Layout widths ---------- */
+  --w-page: 1440px;
+  --w-content: 1240px;
+  --w-narrow: 760px;
+  --w-measure: 62ch;
+  --w-measure-tight: 48ch;
+  --gutter: clamp(1.25rem, 0.4rem + 3.4vw, 4.5rem);
+
+  /* ---------- Radius ---------- */
+  --r-none: 0;
+  --r-xs: 2px;
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-pill: 999px;
+  --r-circle: 50%;
+
+  /* ---------- Borders ---------- */
+  --bw-hair: 1px;
+
+  /* ---------- Motion ---------- */
+  --dur-xs: 180ms;
+  --dur-sm: 320ms;
+  --dur-md: 560ms;
+  --dur-lg: 900ms;
+  --dur-xl: 1400ms;
+  --dur-amb: 34s; /* ambient circle drift */
+  --dur-amb-slow: 52s;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-linear: linear;
+
+  --stagger: 90ms;
+
+  /* ---------- Elevation (used very sparingly) ---------- */
+  --shadow-soft: 0 24px 60px -40px rgba(48, 47, 46, 0.45);
+
+  /* ---------- Z ---------- */
+  --z-bg: 0;
+  --z-content: 1;
+  --z-header: 50;
+  --z-overlay: 80;
+}
+
+/* Header height is read by scroll-margin + the mobile menu */
+:root {
+  --header-h: 74px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 92px;
+  }
+}

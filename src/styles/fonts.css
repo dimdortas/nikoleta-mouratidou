@@ -1,0 +1,52 @@
+/* =============================================================
+   FONTS
+
+   1. Bona Nova  — editorial serif. Matches the printed identity.
+                   Loaded from Google Fonts (greek + latin subsets).
+
+   2. Cocomat Pro — brand UI sans. NOT bundled: the files on this
+                   machine are TRIAL licences and may not be served
+                   from a website.
+                   → Drop licensed .woff2 files into /public/fonts
+                     using the exact filenames below and they take
+                     over automatically. Nothing else to change.
+                     See public/fonts/README.md
+
+   Until then the stack falls back to Manrope (geometric, full Greek
+   coverage) which is loaded alongside Bona Nova.
+   ============================================================= */
+
+/* --- ΕΝΕΡΓΟΠΟΙΗΣΤΕ αφαιρώντας αυτά τα δύο σχόλια όταν προστεθούν τα αρχεία --- */
+/*
+@font-face {
+  font-family: 'Cocomat Pro';
+  src: url('/fonts/CocomatPro-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cocomat Pro';
+  src: url('/fonts/CocomatPro-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cocomat Pro';
+  src: url('/fonts/CocomatPro-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cocomat Pro';
+  src: url('/fonts/CocomatPro-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/

@@ -1,0 +1,21 @@
+# Netlify — έτοιμο για σύνδεση όποτε θελήσετε.
+# app.netlify.com → "Add new site" → "Import an existing project" → αυτό το repo.
+# Δεν χρειάζεται καμία άλλη ρύθμιση· το site βγαίνει στη ρίζα του domain.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

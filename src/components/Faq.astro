@@ -1,0 +1,170 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { faq } from '../data/site';
+
+const slug = (i: number) => `faq-${i + 1}`;
+---
+
+<section class="faq section" aria-labelledby="faq-title">
+  <div class="faq__inner shell">
+    <header class="faq__head">
+      <p class="eyebrow" data-reveal>Συχνές ερωτήσεις</p>
+      <h2 class="faq__title" id="faq-title">
+        <RevealText text="Πριν ξεκινήσουμε" stagger={60} />
+      </h2>
+    </header>
+
+    <div class="faq__list" data-disclosure-group="multi">
+      {
+        faq.map((item, i) => (
+          <div class="faq__item" data-disclosure data-reveal style={`--reveal-delay:${i * 60}ms`}>
+            <h3 class="faq__q">
+              <button
+                class="faq__trigger"
+                type="button"
+                data-disclosure-trigger
+                aria-expanded="false"
+                aria-controls={`${slug(i)}-panel`}
+                id={`${slug(i)}-trigger`}
+              >
+                <span class="faq__q-text">{item.q}</span>
+                <span class="faq__sign" aria-hidden="true">
+                  <i />
+                  <i />
+                </span>
+              </button>
+            </h3>
+            <div
+              class="faq__panel"
+              id={`${slug(i)}-panel`}
+              role="region"
+              aria-labelledby={`${slug(i)}-trigger`}
+              data-disclosure-panel
+            >
+              <p class="faq__a">{item.a}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__inner {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .faq__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .faq__title {
+    font-size: var(--fs-h2);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+    max-inline-size: 12ch;
+  }
+
+  .faq__item {
+    border-block-start: 1px solid var(--line);
+  }
+
+  .faq__item:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .faq__q {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: normal;
+    line-height: inherit;
+  }
+
+  .faq__trigger {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    inline-size: 100%;
+    padding-block: clamp(1.25rem, 2.6vw, 1.85rem);
+    text-align: start;
+  }
+
+  .faq__trigger {
+    --faq-q: clamp(1.0625rem, 0.95rem + 0.55vw, 1.4375rem);
+  }
+
+  .faq__q-text {
+    font-family: var(--font-display);
+    font-size: var(--faq-q);
+    line-height: 1.35;
+    letter-spacing: -0.008em;
+    color: var(--text);
+    transition: color var(--dur-sm) var(--ease-out-soft);
+    text-wrap: pretty;
+  }
+
+  .faq__trigger:hover .faq__q-text,
+  .faq__trigger:focus-visible .faq__q-text {
+    color: var(--c-olive-deep);
+  }
+
+  .faq__sign {
+    position: relative;
+    inline-size: 13px;
+    block-size: calc(var(--faq-q) * 1.35);
+    flex: none;
+    align-self: start;
+  }
+
+  .faq__sign i {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 1px;
+    background-color: var(--text-soft);
+    transition:
+      transform var(--dur-md) var(--ease-out-soft),
+      background-color var(--dur-md) var(--ease-out-soft);
+  }
+
+  .faq__sign i:last-child {
+    transform: rotate(90deg);
+  }
+
+  .faq__item.is-open .faq__sign i {
+    background-color: var(--accent);
+  }
+
+  .faq__item.is-open .faq__sign i:last-child {
+    transform: rotate(0deg);
+  }
+
+  .faq__a {
+    padding-block: 0 clamp(1.5rem, 3vw, 2.25rem);
+    padding-inline-end: clamp(0rem, 6vw, 5rem);
+    font-size: var(--fs-body);
+    line-height: 1.76;
+    color: var(--text-muted);
+    max-inline-size: var(--w-measure);
+  }
+
+  @media (min-width: 900px) {
+    .faq__inner {
+      grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+      column-gap: clamp(3rem, 8vw, 7rem);
+      align-items: start;
+    }
+
+    .faq__head {
+      position: sticky;
+      inset-block-start: calc(var(--header-h) + 3rem);
+    }
+  }
+</style>

@@ -1,0 +1,127 @@
+---
+import Circles from './Circles.astro';
+import { site } from '../../data/site';
+
+interface Props {
+  /** 'lockup' = σήμα + όνομα σε μία σειρά· 'stack' = στοιβαγμένο */
+  variant?: 'lockup' | 'stack';
+  class?: string;
+  href?: string;
+}
+
+const { variant = 'lockup', class: className = '', href = '#top' } = Astro.props;
+---
+
+<a class:list={['logo', `logo--${variant}`, className]} href={href} data-scroll>
+  <span class="logo__mark" aria-hidden="true">
+    <Circles stroke={2.4} fillCore={true} />
+  </span>
+  <span class="logo__type">
+    <span class="logo__name"
+      >{site.nameParts.first} {site.nameParts.initial} {site.nameParts.last}, {site.credential}</span
+    >
+    <span class="logo__role">{site.titleShort}</span>
+  </span>
+  <span class="sr-only">— Αρχική</span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(0.625rem, 1.2vw, 0.9rem);
+    color: var(--text);
+  }
+
+  .logo__mark {
+    display: block;
+    inline-size: 34px;
+    flex: none;
+    color: var(--c-olive);
+    transition: transform var(--dur-lg) var(--ease-out-soft);
+  }
+
+  .logo:hover .logo__mark {
+    transform: rotate(-6deg);
+  }
+
+  .logo__type {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22em;
+    min-width: 0;
+  }
+
+  .logo__name {
+    font-family: var(--font-display);
+    font-size: clamp(0.9375rem, 0.86rem + 0.35vw, 1.125rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+
+  .logo__role {
+    font-family: var(--font-ui);
+    font-size: 0.625rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.15em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    white-space: nowrap;
+  }
+
+  /* ---------- stack (footer) ---------- */
+  .logo--stack {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .logo--stack .logo__mark {
+    inline-size: 56px;
+  }
+
+  .logo--stack .logo__name {
+    font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  }
+
+  /* ---------- σε σκούρο φόντο ---------- */
+  :global(.is-deep) .logo {
+    color: var(--text-on-deep);
+  }
+
+  :global(.is-deep) .logo__mark {
+    color: var(--c-olive-mist);
+  }
+
+  :global(.is-deep) .logo__role {
+    color: var(--text-on-deep-muted);
+  }
+
+  /* Στενή ζώνη laptop: το λογότυπο μαζεύει λίγο ώστε η πλοήγηση
+     και το CTA να έχουν άνετο χώρο. */
+  @media (min-width: 1100px) and (max-width: 1279px) {
+    .logo--lockup .logo__name {
+      font-size: 0.9375rem;
+    }
+
+    .logo--lockup .logo__mark {
+      inline-size: 30px;
+    }
+  }
+
+  @media (max-width: 559px) {
+    .logo__role {
+      display: none;
+    }
+
+    .logo__mark {
+      inline-size: 30px;
+    }
+
+    .logo--stack .logo__role {
+      display: block;
+    }
+  }
+</style>

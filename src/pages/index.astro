@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/Hero.astro';
+import Philosophy from '../components/Philosophy.astro';
+import Services from '../components/Services.astro';
+import Approach from '../components/Approach.astro';
+import About from '../components/About.astro';
+import Formats from '../components/Formats.astro';
+import Faq from '../components/Faq.astro';
+import Contact from '../components/Contact.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout>
+  <SiteHeader />
+
+  <main id="main">
+    <Hero />
+    <Philosophy />
+    <Services />
+    <Approach />
+    <About />
+    <Formats />
+    <Faq />
+    <Contact />
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<script>
+  import { initMotion } from '../scripts/motion';
+  import { initHeader } from '../scripts/header';
+  import { initDisclosures } from '../scripts/disclosure';
+  import { initForm } from '../scripts/form';
+
+  const boot = () => {
+    initMotion();
+    initHeader();
+    initDisclosures();
+    initForm();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+</script>

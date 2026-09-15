@@ -1,0 +1,37 @@
+---
+/**
+ * Αποκάλυψη κειμένου λέξη-λέξη, με μάσκα.
+ * Χωρίς JS το κείμενο είναι απλώς ορατό (progressive enhancement).
+ *
+ * Σημείωση: επιστρέφει πάντα <span>. Το στοιχείο επικεφαλίδας και τα
+ * στυλ του ορίζονται από το γονικό component, ώστε να μη χάνεται το
+ * style scoping του Astro.
+ */
+interface Props {
+  text: string;
+  /** ms ανά λέξη */
+  stagger?: number;
+  /** αρχική καθυστέρηση σε ms */
+  delay?: number;
+  class?: string;
+}
+
+const { text, stagger = 55, delay = 0, class: className = '' } = Astro.props;
+
+const words = text.split(' ');
+---
+
+<span class:list={['rt', className]} data-reveal-text
+  >{
+    words.map((w, i) => (
+      <>
+        <span class="rt__w">
+          <span class="rt__i" style={`--w-delay:${delay + i * stagger}ms`}>
+            {w}
+          </span>
+        </span>
+        {i < words.length - 1 ? ' ' : ''}
+      </>
+    ))
+  }</span
+>

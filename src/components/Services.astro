@@ -1,0 +1,355 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { services } from '../data/site';
+import { keepSeparators } from '../lib/text';
+---
+
+<section class="svc section section--lg" id="ypiresies" aria-labelledby="ypiresies-title">
+  <div class="svc__head shell">
+    <p class="eyebrow" data-reveal>Υπηρεσίες</p>
+    <div class="svc__head-grid">
+      <h2 class="svc__title" id="ypiresies-title">
+        <RevealText text="Ψυχοθεραπεία & Συμβουλευτική" stagger={50} />
+      </h2>
+      <p class="svc__note lead" data-reveal style="--reveal-delay:160ms">
+        {keepSeparators('Παιδιών · Εφήβων · Ενηλίκων · Ζεύγους · Οικογένειας')}
+      </p>
+    </div>
+  </div>
+
+  <div class="svc__list shell" data-disclosure-group="exclusive">
+    {
+      services.map((s, i) => (
+        <article
+          class="svc__item"
+          data-disclosure
+          data-reveal
+          style={`--reveal-delay:${Math.min(i, 4) * 70}ms`}
+        >
+          <h3 class="svc__h">
+            <button
+              class="svc__trigger"
+              type="button"
+              data-disclosure-trigger
+              aria-expanded="false"
+              aria-controls={`svc-panel-${s.id}`}
+              id={`svc-trigger-${s.id}`}
+            >
+              <span class="svc__index" aria-hidden="true">
+                {s.index}
+              </span>
+              <span class="svc__name">{s.title}</span>
+              <span class="svc__summary">{s.summary}</span>
+              <span class="svc__sign" aria-hidden="true">
+                <i />
+                <i />
+              </span>
+            </button>
+          </h3>
+
+          <div
+            class="svc__panel"
+            id={`svc-panel-${s.id}`}
+            role="region"
+            aria-labelledby={`svc-trigger-${s.id}`}
+            data-disclosure-panel
+          >
+            <div class="svc__panel-inner">
+              <div class="svc__prose">
+                {s.body.map((p) => (
+                  <p>{p}</p>
+                ))}
+
+                {s.extra && (
+                  <div class="svc__extra">
+                    <h4 class="svc__extra-title">{s.extra.title}</h4>
+                    {s.extra.body.map((p) => (
+                      <p>{p}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {s.topics && (
+                <div class="svc__topics">
+                  <p class="svc__topics-label">{s.topicsLabel}</p>
+                  <ul>
+                    {s.topics.map((t) => (
+                      <li>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .svc__head {
+    margin-block-end: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .svc__head-grid {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    margin-block-start: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .svc__title {
+    font-size: var(--fs-h2);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+    max-inline-size: 14ch;
+  }
+
+  .svc__note {
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    max-inline-size: 26ch;
+  }
+
+  /* ---------------- λίστα ---------------- */
+  .svc__item {
+    border-block-start: 1px solid var(--line);
+  }
+
+  .svc__item:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+
+  .svc__h {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: normal;
+    line-height: inherit;
+  }
+
+  .svc__trigger {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    column-gap: clamp(1rem, 3vw, 2.5rem);
+    inline-size: 100%;
+    padding-block: clamp(1.5rem, 3.2vw, 2.5rem);
+    text-align: start;
+    color: var(--text);
+    transition: color var(--dur-md) var(--ease-out-soft);
+  }
+
+  .svc__index {
+    font-family: var(--font-ui);
+    font-size: var(--fs-index);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.1em;
+    color: var(--text-soft);
+    transition: color var(--dur-md) var(--ease-out-soft);
+  }
+
+  .svc__name {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    line-height: 1.16;
+    letter-spacing: var(--ls-heading);
+    text-wrap: balance;
+  }
+
+  .svc__summary {
+    display: none;
+  }
+
+  /* Σταυρός → παύλα */
+  /* Κουτί ίσο με το ύψος της πρώτης γραμμής του τίτλου, ώστε το σύμβολο
+     να κεντράρεται πάντα σε αυτήν — και σε τίτλους δύο σειρών. */
+  .svc__sign {
+    position: relative;
+    inline-size: 15px;
+    block-size: calc(var(--fs-h3) * 1.16);
+    align-self: start;
+    flex: none;
+  }
+
+  .svc__sign i {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: 100%;
+    block-size: 1px;
+    background-color: var(--text-soft);
+    transition:
+      transform var(--dur-md) var(--ease-out-soft),
+      background-color var(--dur-md) var(--ease-out-soft);
+  }
+
+  .svc__sign i:last-child {
+    transform: rotate(90deg);
+  }
+
+  .svc__item.is-open .svc__sign i:last-child {
+    transform: rotate(0deg);
+  }
+
+  /* hover / open states */
+  .svc__trigger:hover .svc__index,
+  .svc__trigger:focus-visible .svc__index,
+  .svc__item.is-open .svc__index {
+    color: var(--accent);
+  }
+
+  .svc__trigger:hover .svc__sign i,
+  .svc__item.is-open .svc__sign i {
+    background-color: var(--accent);
+  }
+
+  .svc__trigger:hover .svc__name {
+    color: var(--c-olive-deep);
+  }
+
+  /* ---------------- panel ---------------- */
+  .svc__panel-inner {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    padding-block: 0 clamp(2rem, 4.5vw, 3.5rem);
+    max-inline-size: 100%;
+  }
+
+  .svc__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    max-inline-size: var(--w-measure);
+    color: var(--text-muted);
+  }
+
+  .svc__extra {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    margin-block-start: clamp(1rem, 2vw, 1.75rem);
+    padding-block-start: clamp(1.25rem, 2.5vw, 2rem);
+    border-block-start: 1px solid var(--line-soft);
+  }
+
+  .svc__extra-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    font-style: italic;
+    color: var(--text);
+  }
+
+  /* Θέματα — τυπογραφική λίστα, όχι κουτάκια */
+  .svc__topics-label {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-block-end: 1.1rem;
+  }
+
+  .svc__topics ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .svc__topics li {
+    position: relative;
+    padding-block: 0.55rem;
+    padding-inline-start: 1.4rem;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--text-muted);
+    border-block-start: 1px solid var(--line-soft);
+  }
+
+  .svc__topics li:first-child {
+    border-block-start: 0;
+  }
+
+  .svc__topics li::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 1.22em;
+    inset-inline-start: 0;
+    inline-size: 5px;
+    block-size: 5px;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+  }
+
+  /* ---------------- ≥768 ---------------- */
+  @media (min-width: 768px) {
+    .svc__head-grid {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      column-gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .svc__note {
+      text-align: end;
+      max-inline-size: 20ch;
+      padding-block-end: 0.5rem;
+    }
+
+    .svc__panel-inner {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      column-gap: clamp(2.5rem, 6vw, 6rem);
+      padding-inline-start: calc(var(--fs-index) * 2.4 + clamp(1rem, 3vw, 2.5rem));
+    }
+  }
+
+  /* ≥1024: εμφανίζεται και η μικρή περίληψη στη σειρά */
+  @media (min-width: 1024px) {
+    .svc__trigger {
+      grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.85fr) auto;
+    }
+
+    .svc__summary {
+      display: block;
+      font-size: var(--fs-small);
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-inline-size: 44ch;
+      opacity: 0;
+      transform: translateY(4px);
+      transition:
+        opacity var(--dur-md) var(--ease-out-soft),
+        transform var(--dur-md) var(--ease-out-soft);
+    }
+
+    .svc__trigger:hover .svc__summary,
+    .svc__trigger:focus-visible .svc__summary,
+    .svc__item.is-open .svc__summary {
+      opacity: 1;
+      transform: none;
+    }
+
+    .svc__panel-inner {
+      padding-inline-start: calc(var(--fs-index) * 2.4 + 2.5rem);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .svc__trigger {
+      grid-template-columns: auto 1fr auto;
+      column-gap: 1rem;
+      padding-block: 1.5rem;
+    }
+
+    .svc__name {
+      font-size: clamp(1.25rem, 4.4vw, 1.5rem);
+    }
+
+    .svc__index {
+      font-size: 0.75rem;
+    }
+  }
+</style>

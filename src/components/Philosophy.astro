@@ -1,0 +1,217 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { philosophy, images } from '../data/site';
+---
+
+<section class="phil section section--lg is-cream" id="filosofia" aria-labelledby="filosofia-title">
+  <div class="phil__art" aria-hidden="true">
+    <span class="phil__ring" data-parallax="0.08"></span>
+  </div>
+
+  <div class="phil__inner shell">
+    <div class="phil__head">
+      <p class="eyebrow" data-reveal>Φιλοσοφία</p>
+      <h2 class="phil__title" id="filosofia-title">
+        <RevealText text={philosophy.title} stagger={48} />
+      </h2>
+    </div>
+
+    <div class="phil__body">
+      {
+        philosophy.body.map((p, i) => (
+          <p class="phil__p" data-reveal style={`--reveal-delay:${i * 90}ms`}>
+            {p}
+          </p>
+        ))
+      }
+    </div>
+
+    <figure class="phil__pull" data-reveal>
+      <span class="phil__pull-rule" aria-hidden="true"></span>
+      <blockquote>
+        <p>{philosophy.pull}</p>
+      </blockquote>
+    </figure>
+
+    <div class="phil__texture" data-reveal="fade" aria-hidden="true">
+      <img
+        src={`${images.linen.src}?auto=format&fit=crop&w=900&q=70`}
+        alt=""
+        width="900"
+        height="720"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .phil {
+    position: relative;
+    overflow: clip;
+  }
+
+  /* Υπερμεγέθης κύκλος που κόβεται από την αριστερή άκρη */
+  .phil__art {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .phil__ring {
+    position: absolute;
+    inline-size: min(58vw, 760px);
+    aspect-ratio: 1;
+    inset-block-start: 12%;
+    inset-inline-start: -24%;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+    opacity: 0.2;
+    translate: 0 var(--parallax-y, 0px);
+  }
+
+  .phil__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .phil__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .phil__title {
+    font-size: var(--fs-h1);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+    max-inline-size: 16ch;
+    text-wrap: pretty;
+  }
+
+  .phil__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35em;
+    max-inline-size: var(--w-measure);
+  }
+
+  .phil__p {
+    font-size: var(--fs-lead);
+    line-height: 1.72;
+    color: var(--text-muted);
+  }
+
+  /* ---------- pull quote ---------- */
+  .phil__pull {
+    position: relative;
+    max-inline-size: 30ch;
+    padding-block-start: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .phil__pull-rule {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: 4.5rem;
+    block-size: 1px;
+    background-color: var(--accent);
+  }
+
+  .phil__pull blockquote p {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-style: italic;
+    line-height: 1.3;
+    letter-spacing: -0.008em;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+
+  /* ---------- υφή ---------- */
+  .phil__texture {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-circle);
+    aspect-ratio: 1;
+    mix-blend-mode: multiply;
+    opacity: 0.34;
+  }
+
+  /* Λεπτό περίγραμμα κύκλου που «δένει» την υφή με τη γλώσσα του σήματος */
+  .phil__texture::after {
+    content: '';
+    position: absolute;
+    inset: -8%;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+    opacity: 0.4;
+  }
+
+  .phil__texture img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- ≥768px: ασύμμετρο editorial grid ---------- */
+  @media (min-width: 768px) {
+    .phil__inner {
+      grid-template-columns: repeat(12, 1fr);
+      align-items: start;
+      column-gap: clamp(1.5rem, 3vw, 3rem);
+      row-gap: clamp(3.5rem, 7vw, 6.5rem);
+    }
+
+    .phil__head {
+      grid-column: 1 / span 7;
+    }
+
+    .phil__body {
+      grid-column: 8 / span 5;
+      padding-block-start: clamp(0.5rem, 3vw, 2.5rem);
+    }
+
+    .phil__pull {
+      grid-column: 2 / span 5;
+    }
+
+    .phil__texture {
+      grid-column: 8 / span 4;
+      align-self: center;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .phil__head {
+      grid-column: 1 / span 6;
+    }
+
+    .phil__body {
+      grid-column: 8 / span 4;
+    }
+
+    .phil__pull {
+      grid-column: 2 / span 4;
+    }
+
+    .phil__texture {
+      grid-column: 8 / span 3;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .phil__texture {
+      max-inline-size: 62%;
+      margin-inline-start: auto;
+    }
+
+    .phil__ring {
+      inline-size: 92vw;
+      inset-inline-start: -42%;
+    }
+  }
+</style>

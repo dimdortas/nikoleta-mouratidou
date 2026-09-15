@@ -1,0 +1,432 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { approach } from '../data/site';
+
+/* Γεωμετρία ταυτόσημη με το σήμα: viewBox 200×200, r=60 */
+const R = 60;
+const NODES = [
+  { cx: 100, cy: 72, from: 'translate(0px, -38px)' },
+  { cx: 68, cy: 127.5, from: 'translate(-34px, 22px)' },
+  { cx: 132, cy: 127.5, from: 'translate(34px, 22px)' },
+];
+const CIRCUMFERENCE = (2 * Math.PI * R).toFixed(1);
+---
+
+<section class="apr section section--lg is-deep" id="prosegisi" aria-labelledby="prosegisi-title">
+  <div class="apr__inner shell">
+    <header class="apr__head">
+      <p class="eyebrow" data-reveal>Η ματιά μου</p>
+      <h2 class="apr__title" id="prosegisi-title">
+        <RevealText text={approach.title} stagger={60} />
+      </h2>
+      <p class="apr__opening" data-reveal style="--reveal-delay:200ms">{approach.opening}</p>
+    </header>
+
+    <div class="apr__body">
+      <!-- Διάγραμμα: τρεις κύκλοι που έρχονται σε επαφή -->
+      <div class="apr__figure" data-reveal="fade">
+        <div class="apr__diagram" data-parallax="0.05">
+          <svg
+            class="apr__svg"
+            viewBox="0 0 200 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <defs>
+              <clipPath id="apr-a"><circle cx={NODES[0].cx} cy={NODES[0].cy} r={R} /></clipPath>
+              <clipPath id="apr-b" clip-path="url(#apr-a)">
+                <circle cx={NODES[1].cx} cy={NODES[1].cy} r={R} />
+              </clipPath>
+            </defs>
+
+            {
+              NODES.map((n, i) => (
+                <g class={`apr__ring apr__ring--${i + 1}`} style={`--from:${n.from}; --i:${i}`}>
+                  <circle
+                    cx={n.cx}
+                    cy={n.cy}
+                    r={R}
+                    stroke="currentColor"
+                    stroke-width="0.6"
+                    stroke-dasharray={CIRCUMFERENCE}
+                    stroke-dashoffset={CIRCUMFERENCE}
+                    pathLength={CIRCUMFERENCE}
+                  />
+                </g>
+              ))
+            }
+
+            <circle
+              class="apr__core"
+              cx={NODES[2].cx}
+              cy={NODES[2].cy}
+              r={R}
+              clip-path="url(#apr-b)"
+            />
+          </svg>
+
+          <ul class="apr__pins">
+            {
+              approach.circles.map((c, i) => (
+                <li class={`apr__pin apr__pin--${i + 1}`} style={`--i:${i}`}>
+                  {c.label}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Τα τρία πλαίσια, ως κείμενο -->
+      <ol class="apr__notes">
+        {
+          approach.circles.map((c, i) => (
+            <li class="apr__note" data-reveal style={`--reveal-delay:${i * 110}ms`}>
+              <span class="apr__note-dot" aria-hidden="true" />
+              <h3 class="apr__note-title">{c.label}</h3>
+              <p class="apr__note-text">{c.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <footer class="apr__foot">
+      <p class="apr__closing" data-reveal>{approach.closing[0]}</p>
+      <p class="apr__closing apr__closing--sub" data-reveal style="--reveal-delay:120ms">
+        {approach.closing[1]}
+      </p>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .apr {
+    position: relative;
+    overflow: clip;
+  }
+
+  .apr__inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3.5rem, 8vw, 7rem);
+  }
+
+  /* ---------------- κεφαλίδα ---------------- */
+  .apr__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    max-inline-size: 62ch;
+  }
+
+  .apr__title {
+    font-size: var(--fs-h1);
+    line-height: 1.04;
+    letter-spacing: var(--ls-display);
+  }
+
+  .apr__opening {
+    max-inline-size: 52ch;
+    font-size: var(--fs-lead);
+    line-height: 1.7;
+    color: var(--text-on-deep-muted);
+  }
+
+  /* ---------------- σώμα ---------------- */
+  .apr__body {
+    display: grid;
+    gap: clamp(3rem, 8vw, 5rem);
+    align-items: center;
+  }
+
+  .apr__figure {
+    display: flex;
+    justify-content: center;
+  }
+
+  .apr__diagram {
+    position: relative;
+    inline-size: min(100%, 520px);
+    aspect-ratio: 1;
+    translate: 0 var(--parallax-y, 0px);
+  }
+
+  .apr__svg {
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+    color: var(--c-olive-mist);
+  }
+
+  .apr__ring {
+    transform-origin: 100px 100px;
+    transform: var(--from);
+    opacity: 0;
+  }
+
+  .apr__ring circle {
+    transition: stroke-dashoffset 2200ms var(--ease-out-soft);
+    transition-delay: calc(var(--i) * 260ms + 200ms);
+  }
+
+  .apr__core {
+    fill: var(--c-olive-mist);
+    opacity: 0;
+    transition: opacity 1400ms var(--ease-out-soft) 1600ms;
+  }
+
+  /* Ενεργοποίηση όταν η ενότητα μπει στο viewport */
+  .apr__figure.is-in .apr__ring {
+    opacity: 1;
+    transform: translate(0, 0);
+    transition:
+      opacity 1400ms var(--ease-out-soft),
+      transform 2000ms var(--ease-out-soft);
+    transition-delay: calc(var(--i) * 260ms + 120ms);
+  }
+
+  .apr__figure.is-in .apr__ring circle {
+    stroke-dashoffset: 0;
+  }
+
+  .apr__figure.is-in .apr__core {
+    opacity: 0.34;
+  }
+
+  /* Μετά το settle: πολύ αργή αναπνοή */
+  .apr__figure.is-in .apr__ring--1 {
+    animation: apr-a 46s var(--ease-in-out-soft) 3s infinite;
+  }
+  .apr__figure.is-in .apr__ring--2 {
+    animation: apr-b 38s var(--ease-in-out-soft) 3s infinite;
+  }
+  .apr__figure.is-in .apr__ring--3 {
+    animation: apr-c 42s var(--ease-in-out-soft) 3s infinite;
+  }
+
+  @keyframes apr-a {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0, -6px);
+    }
+  }
+  @keyframes apr-b {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(5px, 4px);
+    }
+  }
+  @keyframes apr-c {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-5px, 4px);
+    }
+  }
+
+  /* ---------------- ετικέτες πάνω στους κύκλους ---------------- */
+  .apr__pins {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .apr__pin {
+    position: absolute;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--text-on-deep);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 900ms var(--ease-out-soft),
+      transform 900ms var(--ease-out-soft);
+    transition-delay: calc(var(--i) * 180ms + 1700ms);
+  }
+
+  .apr__figure.is-in .apr__pin {
+    opacity: 0.9;
+    transform: none;
+  }
+
+  .apr__pin--1 {
+    inset-block-start: -2.25rem;
+    inset-inline-start: 50%;
+    translate: -50% 0;
+  }
+
+  .apr__pin--2 {
+    inset-block-end: -2.25rem;
+    inset-inline-start: 2%;
+  }
+
+  .apr__pin--3 {
+    inset-block-end: -2.25rem;
+    inset-inline-end: 2%;
+  }
+
+  /* ---------------- σημειώσεις ---------------- */
+  .apr__notes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .apr__note {
+    position: relative;
+    padding-block: clamp(1.5rem, 3vw, 2.25rem);
+    padding-inline-start: 2rem;
+    border-block-start: 1px solid var(--line-on-deep);
+  }
+
+  .apr__note:last-child {
+    border-block-end: 1px solid var(--line-on-deep);
+  }
+
+  .apr__note-dot {
+    position: absolute;
+    inset-block-start: calc(clamp(1.5rem, 3vw, 2.25rem) + 0.45em);
+    inset-inline-start: 0;
+    inline-size: 9px;
+    block-size: 9px;
+    border: 1px solid var(--c-olive-mist);
+    border-radius: var(--r-circle);
+  }
+
+  .apr__note:nth-child(2) .apr__note-dot {
+    background-color: color-mix(in srgb, var(--c-olive-mist) 35%, transparent);
+  }
+
+  .apr__note:nth-child(3) .apr__note-dot {
+    background-color: var(--c-olive-mist);
+  }
+
+  .apr__note-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    line-height: 1.2;
+    color: var(--text-on-deep);
+  }
+
+  .apr__note-text {
+    margin-block-start: 0.6rem;
+    font-size: var(--fs-small);
+    line-height: 1.68;
+    color: var(--text-on-deep-muted);
+    max-inline-size: 42ch;
+  }
+
+  /* ---------------- υποσέλιδο ενότητας ---------------- */
+  .apr__foot {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    max-inline-size: 34ch;
+    margin-inline-start: auto;
+    text-align: end;
+  }
+
+  .apr__closing {
+    font-family: var(--font-display);
+    font-size: var(--fs-h3);
+    font-style: italic;
+    line-height: 1.28;
+    color: var(--text-on-deep);
+    text-wrap: pretty;
+  }
+
+  .apr__closing--sub {
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--text-on-deep-muted);
+  }
+
+  /* ---------------- breakpoints ---------------- */
+  @media (min-width: 900px) {
+    .apr__body {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+      column-gap: clamp(3rem, 7vw, 7rem);
+    }
+
+    .apr__diagram {
+      inline-size: min(100%, 560px);
+    }
+
+    .apr__pin--1 {
+      inset-block-start: -2.75rem;
+    }
+
+    .apr__pin--2,
+    .apr__pin--3 {
+      inset-block-end: -2.75rem;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .apr__foot {
+      max-inline-size: 40ch;
+      margin-inline-start: 0;
+      text-align: start;
+    }
+
+    .apr__diagram {
+      inline-size: min(84%, 420px);
+    }
+  }
+
+  @media (max-width: 479px) {
+    .apr__diagram {
+      inline-size: 88%;
+    }
+
+    .apr__pin {
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+    }
+
+    .apr__pin--2,
+    .apr__pin--3 {
+      inset-block-end: -2rem;
+    }
+
+    .apr__pin--1 {
+      inset-block-start: -2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apr__ring {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+
+    .apr__ring circle {
+      stroke-dashoffset: 0 !important;
+    }
+
+    .apr__core {
+      opacity: 0.34 !important;
+    }
+
+    .apr__pin {
+      opacity: 0.9 !important;
+      transform: none !important;
+    }
+  }
+</style>

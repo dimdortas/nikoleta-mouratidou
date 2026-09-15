@@ -1,0 +1,195 @@
+---
+/**
+ * Το σήμα των τριών τεμνόμενων κύκλων, ξαναχτισμένο ως γεωμετρία.
+ * Αναλογίες παρμένες από το logo.pdf:
+ *   ισόπλευρο τρίγωνο κέντρων, ακτίνα κύκλου ≈ 1.62 × περίκεντρη ακτίνα.
+ */
+interface Props {
+  /** Πάχος γραμμής στο σύστημα συντεταγμένων του viewBox (200×200). */
+  stroke?: number;
+  /** Γέμισμα της τριπλής τομής. */
+  fillCore?: boolean;
+  /** Αργή, συνεχής περιστροφή/αναπνοή. */
+  drift?: boolean;
+  /** Ετικέτες γύρω από κάθε κύκλο (συστημική τομή). */
+  labels?: [string, string, string] | null;
+  class?: string;
+  title?: string;
+}
+
+const {
+  stroke = 1,
+  fillCore = true,
+  drift = false,
+  labels = null,
+  class: className = '',
+  title,
+} = Astro.props;
+
+const uid = 'cm' + Math.random().toString(36).slice(2, 9);
+
+/* Κέντρα: κορυφή, κάτω-αριστερά, κάτω-δεξιά */
+const R = 60;
+const C = [
+  { cx: 100, cy: 72 },
+  { cx: 68, cy: 127.5 },
+  { cx: 132, cy: 127.5 },
+] as const;
+
+const labelPos = [
+  { x: 100, y: 18, anchor: 'middle' },
+  { x: 6, y: 176, anchor: 'start' },
+  { x: 194, y: 176, anchor: 'end' },
+] as const;
+---
+
+<svg
+  class:list={['circles', drift && 'circles--drift', className]}
+  viewBox="0 0 200 200"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role={title ? 'img' : 'presentation'}
+  aria-hidden={title ? undefined : 'true'}
+  aria-label={title}
+>
+  {title && <title>{title}</title>}
+
+  {
+    fillCore && (
+      <defs>
+        <clipPath id={`${uid}-a`}>
+          <circle cx={C[0].cx} cy={C[0].cy} r={R} />
+        </clipPath>
+        <clipPath id={`${uid}-b`} clip-path={`url(#${uid}-a)`}>
+          <circle cx={C[1].cx} cy={C[1].cy} r={R} />
+        </clipPath>
+      </defs>
+    )
+  }
+
+  <g class="circles__ring circles__ring--1">
+    <circle cx={C[0].cx} cy={C[0].cy} r={R} stroke="currentColor" stroke-width={stroke} />
+  </g>
+  <g class="circles__ring circles__ring--2">
+    <circle cx={C[1].cx} cy={C[1].cy} r={R} stroke="currentColor" stroke-width={stroke} />
+  </g>
+  <g class="circles__ring circles__ring--3">
+    <circle cx={C[2].cx} cy={C[2].cy} r={R} stroke="currentColor" stroke-width={stroke} />
+  </g>
+
+  {
+    fillCore && (
+      <circle
+        class="circles__core"
+        cx={C[2].cx}
+        cy={C[2].cy}
+        r={R}
+        clip-path={`url(#${uid}-b)`}
+      />
+    )
+  }
+
+  {
+    labels && (
+      <g class="circles__labels">
+        {labels.map((l, i) => (
+          <text
+            x={labelPos[i].x}
+            y={labelPos[i].y}
+            text-anchor={labelPos[i].anchor}
+            class="circles__label"
+          >
+            {l}
+          </text>
+        ))}
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .circles {
+    inline-size: 100%;
+    block-size: auto;
+    color: var(--c-olive);
+    overflow: visible;
+  }
+
+  .circles__core {
+    fill: var(--c-olive-mist);
+  }
+
+  .circles__ring {
+    transform-origin: 100px 100px;
+  }
+
+  .circles__label {
+    font-family: var(--font-ui);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: currentColor;
+    opacity: 0.72;
+  }
+
+  /* Αργή, σχεδόν ανεπαίσθητη κίνηση — κάθε κύκλος με δικό του ρυθμό */
+  .circles--drift .circles__ring--1 {
+    animation: drift-a var(--dur-amb-slow) var(--ease-in-out-soft) infinite;
+  }
+  .circles--drift .circles__ring--2 {
+    animation: drift-b var(--dur-amb) var(--ease-in-out-soft) infinite;
+  }
+  .circles--drift .circles__ring--3 {
+    animation: drift-c calc(var(--dur-amb) * 1.28) var(--ease-in-out-soft) infinite;
+  }
+  .circles--drift .circles__core {
+    animation: core-breathe var(--dur-amb-slow) var(--ease-in-out-soft) infinite;
+  }
+
+  @keyframes drift-a {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(0, -5px);
+    }
+  }
+
+  @keyframes drift-b {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(4.5px, 3px);
+    }
+  }
+
+  @keyframes drift-c {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-4.5px, 3.5px);
+    }
+  }
+
+  @keyframes core-breathe {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.62;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .circles--drift .circles__ring,
+    .circles--drift .circles__core {
+      animation: none;
+    }
+  }
+</style>

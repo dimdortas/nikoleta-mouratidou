@@ -1,0 +1,279 @@
+---
+import Circles from './ui/Circles.astro';
+import Button from './ui/Button.astro';
+import RevealText from './ui/RevealText.astro';
+import { site, hero, cta } from '../data/site';
+---
+
+<section class="hero" id="top">
+  <!-- Γραφική σύνθεση: υπερμεγέθεις κύκλοι που κόβονται από την άκρη -->
+  <div class="hero__art" aria-hidden="true">
+    <div class="hero__art-inner" data-parallax="0.06">
+      <Circles stroke={0.55} fillCore={true} drift={true} />
+    </div>
+    <span class="hero__orbit hero__orbit--1" data-parallax="-0.04"></span>
+    <span class="hero__orbit hero__orbit--2" data-parallax="0.03"></span>
+  </div>
+
+  <div class="hero__inner shell shell--wide">
+    <p class="eyebrow hero__eyebrow" data-reveal style="--reveal-delay:120ms">
+      {hero.eyebrow}
+    </p>
+
+    <h1 class="hero__name">
+      <span class="hero__line">
+        <RevealText text={`${site.nameParts.first} ${site.nameParts.initial}`} delay={220} />
+      </span>
+      <span class="hero__line hero__line--2">
+        <RevealText text={`${site.nameParts.last},`} delay={340} />
+        <span class="hero__msc" data-reveal="fade" style="--reveal-delay:820ms">
+          {site.credential}
+        </span>
+      </span>
+    </h1>
+
+    <p class="hero__role" data-reveal style="--reveal-delay:700ms">
+      <span>Ψυχολόγος Α.Π.Θ.</span>
+      <span class="hero__sep" aria-hidden="true"></span>
+      <span>Συστημική Ψυχοθεραπεύτρια</span>
+    </p>
+
+    <p class="hero__intro" data-reveal style="--reveal-delay:820ms">{hero.intro}</p>
+
+    <div class="hero__actions" data-reveal style="--reveal-delay:940ms">
+      <Button href={cta.hero.href} variant="solid" size="lg">{cta.hero.label}</Button>
+      <Button href={cta.secondary.href} variant="quiet">{cta.secondary.label}</Button>
+    </div>
+  </div>
+
+  <span class="hero__scroll" aria-hidden="true" data-reveal="fade" style="--reveal-delay:1300ms">
+    <i></i>
+  </span>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: 100svh;
+    padding-block: calc(var(--header-h) + clamp(3.5rem, 10vw, 7rem)) clamp(5rem, 12vw, 8rem);
+    overflow: clip;
+  }
+
+  /* ---------------- γραφικό ---------------- */
+  .hero__art {
+    position: absolute;
+    inset: 0;
+    z-index: var(--z-bg);
+    pointer-events: none;
+  }
+
+  .hero__art-inner {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: -14%;
+    inline-size: min(62vw, 780px);
+    translate: 0 calc(-50% + var(--parallax-y, 0px));
+    color: var(--c-olive);
+    opacity: 0.55;
+  }
+
+  /* Δύο ακόμη τροχιές, πολύ διακριτικές */
+  .hero__orbit {
+    position: absolute;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+    opacity: 0.16;
+  }
+
+  .hero__orbit--1 {
+    inline-size: min(52vw, 620px);
+    aspect-ratio: 1;
+    inset-block-start: -22%;
+    inset-inline-start: -16%;
+    translate: 0 var(--parallax-y, 0px);
+  }
+
+  .hero__orbit--2 {
+    inline-size: min(30vw, 340px);
+    aspect-ratio: 1;
+    inset-block-end: -12%;
+    inset-inline-start: 32%;
+    translate: 0 var(--parallax-y, 0px);
+    opacity: 0.1;
+  }
+
+  /* ---------------- περιεχόμενο ---------------- */
+  .hero__inner {
+    position: relative;
+    z-index: var(--z-content);
+    inline-size: 100%;
+  }
+
+  .hero__eyebrow {
+    margin-block-end: clamp(1.75rem, 4vw, 3rem);
+  }
+
+  .hero__name {
+    font-size: var(--fs-display);
+    line-height: var(--lh-display);
+    letter-spacing: var(--ls-display);
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  /* «Μουρατίδου,» + MSc σε μία γραμμή, με κοινή βάση */
+  .hero__line--2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.12em;
+  }
+
+  .hero__msc {
+    flex: none;
+    font-family: var(--font-display);
+    font-size: 0.24em;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    color: var(--text-soft);
+    translate: 0 -1.85em;
+  }
+
+  .hero__role {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem clamp(0.75rem, 1.6vw, 1.25rem);
+    margin-block-start: clamp(1.5rem, 3.4vw, 2.5rem);
+    font-size: clamp(0.8125rem, 0.76rem + 0.22vw, 0.9375rem);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.13em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .hero__sep {
+    inline-size: 2.5rem;
+    block-size: 1px;
+    background-color: var(--c-olive);
+    opacity: 0.6;
+  }
+
+  .hero__intro {
+    max-inline-size: 46ch;
+    margin-block-start: clamp(1.75rem, 3.6vw, 2.75rem);
+    font-size: var(--fs-lead);
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(1rem, 2.4vw, 2.25rem);
+    margin-block-start: clamp(2.25rem, 4.5vw, 3.5rem);
+  }
+
+  /* ---------------- scroll cue ---------------- */
+  .hero__scroll {
+    position: absolute;
+    inset-block-end: clamp(1.5rem, 4vw, 3rem);
+    inset-inline-start: var(--gutter);
+    inline-size: 1px;
+    block-size: clamp(38px, 6vw, 64px);
+    background-color: var(--line);
+    overflow: hidden;
+  }
+
+  .hero__scroll i {
+    position: absolute;
+    inset-inline: 0;
+    block-size: 40%;
+    background-color: var(--c-olive-deep);
+    animation: scroll-cue 3.4s var(--ease-in-out-soft) infinite;
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    55%,
+    100% {
+      transform: translateY(250%);
+    }
+  }
+
+  /* ---------------- responsive ---------------- */
+
+  /* 1024px και κάτω: το γραφικό ανεβαίνει, βγαίνει πιο έξω και ξεθωριάζει,
+     ώστε να μην κάθεται πίσω από το σώμα κειμένου. */
+  @media (max-width: 1023px) {
+    .hero__art-inner {
+      inline-size: min(82vw, 600px);
+      inset-inline-end: -34%;
+      inset-block-start: 26%;
+      opacity: 0.3;
+    }
+  }
+
+  /* Tablet / mobile: οι κύκλοι γίνονται ήρεμο φόντο πίσω από τον τίτλο */
+  @media (max-width: 767px) {
+    .hero {
+      min-block-size: auto;
+      padding-block: calc(var(--header-h) + 4.5rem) clamp(4.5rem, 16vw, 7rem);
+    }
+
+    .hero__art-inner {
+      inline-size: 128vw;
+      inset-inline-end: -46vw;
+      inset-block-start: 26%;
+    }
+
+    .hero__art-inner {
+      opacity: 0.26;
+    }
+
+    .hero__orbit--1 {
+      inline-size: 86vw;
+      inset-block-start: -14%;
+      inset-inline-start: -34%;
+    }
+
+    .hero__orbit--2 {
+      display: none;
+    }
+
+    .hero__name {
+      max-inline-size: 12ch;
+    }
+
+    .hero__intro {
+      max-inline-size: 38ch;
+    }
+
+    .hero__scroll {
+      display: none;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .hero__actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1.25rem;
+    }
+
+    .hero__role {
+      gap: 0.5rem 0.75rem;
+    }
+
+    .hero__sep {
+      inline-size: 1.75rem;
+    }
+  }
+</style>

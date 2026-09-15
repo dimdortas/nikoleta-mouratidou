@@ -1,0 +1,274 @@
+---
+import Logo from './ui/Logo.astro';
+import { site, contact, social, nav } from '../data/site';
+import { keepSeparators } from '../lib/text';
+
+const year = new Date().getFullYear();
+
+const icons: Record<string, string> = {
+  instagram:
+    'M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.4.4.67.8.9 1.4.16.4.36 1 .41 2.2.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2-.22.6-.48 1-.9 1.4-.4.4-.8.67-1.4.9-.4.16-1 .36-2.2.41-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42-.6-.22-1-.48-1.4-.9-.4-.4-.67-.8-.9-1.4-.16-.4-.36-1-.41-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.22-.6.48-1 .9-1.4.4-.4.8-.67 1.4-.9.4-.16 1-.36 2.2-.41C8.4 2.2 8.8 2.2 12 2.2Zm0 1.8c-3.1 0-3.5 0-4.7.07-1.1.05-1.7.24-2.1.4-.5.2-.9.44-1.3.84-.4.4-.64.8-.84 1.3-.16.4-.35 1-.4 2.1C2.6 9.9 2.6 10.3 2.6 12s0 2.1.06 3.3c.05 1.1.24 1.7.4 2.1.2.5.44.9.84 1.3.4.4.8.64 1.3.84.4.16 1 .35 2.1.4 1.2.06 1.6.07 4.7.07s3.5 0 4.7-.07c1.1-.05 1.7-.24 2.1-.4.5-.2.9-.44 1.3-.84.4-.4.64-.8.84-1.3.16-.4.35-1 .4-2.1.06-1.2.07-1.6.07-3.3s0-2.1-.07-3.3c-.05-1.1-.24-1.7-.4-2.1-.2-.5-.44-.9-.84-1.3-.4-.4-.8-.64-1.3-.84-.4-.16-1-.35-2.1-.4C15.5 4 15.1 4 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.1-.6a1.15 1.15 0 1 1 0-2.3 1.15 1.15 0 0 1 0 2.3Z',
+  facebook:
+    'M13.5 21v-8.2h2.8l.42-3.2H13.5V7.5c0-.93.26-1.56 1.6-1.56h1.7V3.08A22.8 22.8 0 0 0 14.3 3c-2.46 0-4.14 1.5-4.14 4.25v2.37H7.35v3.2h2.81V21h3.34Z',
+  linkedin:
+    'M6.94 8.6V20H3.4V8.6h3.54ZM5.17 3.2c1.13 0 1.84.75 1.86 1.73 0 .96-.73 1.73-1.88 1.73h-.02c-1.11 0-1.83-.77-1.83-1.73 0-.98.74-1.73 1.87-1.73ZM20.6 20h-3.54v-6.1c0-1.53-.55-2.58-1.92-2.58-1.05 0-1.67.71-1.95 1.39-.1.25-.12.59-.12.94V20H9.53s.05-10.35 0-11.4h3.54v1.61c.47-.73 1.31-1.77 3.2-1.77 2.33 0 4.08 1.53 4.08 4.81V20Z',
+};
+
+const active = social.filter((s) => s.href);
+---
+
+<footer class="ftr" aria-labelledby="ftr-title">
+  <h2 class="sr-only" id="ftr-title">Στοιχεία επικοινωνίας</h2>
+
+  <div class="ftr__inner shell shell--wide">
+    <div class="ftr__brand">
+      <Logo variant="stack" />
+      <p class="ftr__practice">
+        {site.practice}<br /><span>{keepSeparators(site.practiceFor)}</span>
+      </p>
+    </div>
+
+    <nav class="ftr__nav" aria-label="Πλοήγηση υποσέλιδου">
+      <p class="ftr__label">Πλοήγηση</p>
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} data-scroll>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="ftr__contact">
+      <p class="ftr__label">Επικοινωνία</p>
+      <ul>
+        <li><a href={contact.phoneMobile.href}>{contact.phoneMobile.display}</a></li>
+        <li><a href={contact.phoneLandline.href}>{contact.phoneLandline.display}</a></li>
+        <li><a href={contact.email.href}>{contact.email.display}</a></li>
+      </ul>
+      <address class="ftr__address">
+        <a href={contact.address.mapsUrl} target="_blank" rel="noopener noreferrer">
+          {contact.address.street}<br />
+          <span class="ftr__nowrap">{contact.address.city} {contact.address.postal}</span>
+        </a><br />
+        <span>{contact.address.floor}</span>
+      </address>
+    </div>
+
+    <div class="ftr__social">
+      <p class="ftr__label">Ακολουθήστε</p>
+      <!-- Τα URL των social θα προστεθούν στο src/data/site.ts -->
+      <ul class="ftr__social-list">
+        {
+          social.map((s) =>
+            s.href ? (
+              <li>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  title={s.label}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d={icons[s.icon]} fill="currentColor" />
+                  </svg>
+                </a>
+              </li>
+            ) : (
+              <li>
+                <span class="ftr__social-placeholder" title={`${s.label} — σύντομα`}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d={icons[s.icon]} fill="currentColor" />
+                  </svg>
+                  <span class="sr-only">{s.label} — σύντομα</span>
+                </span>
+              </li>
+            ),
+          )
+        }
+      </ul>
+      {active.length === 0 && <p class="ftr__soon">Σύντομα κοντά σας</p>}
+    </div>
+  </div>
+
+  <div class="ftr__base shell shell--wide">
+    <p>© {year} {site.fullName}</p>
+    <p class="ftr__domain">{site.domainLabel}</p>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    padding-block: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 3vw, 2.5rem);
+    border-block-start: 1px solid var(--line);
+    background-color: var(--bg);
+  }
+
+  .ftr__inner {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  /* ---------------- brand ---------------- */
+  .ftr__brand {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .ftr__practice {
+    font-family: var(--font-ui);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    line-height: 2;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .ftr__practice span {
+    display: block;
+    max-inline-size: 30ch;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .ftr__nowrap {
+    white-space: nowrap;
+  }
+
+  /* ---------------- στήλες ---------------- */
+  .ftr__label {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-block-end: 1.15rem;
+  }
+
+  .ftr__nav ul,
+  .ftr__contact ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .ftr__nav a,
+  .ftr__contact a {
+    font-size: var(--fs-small);
+    line-height: 1.6;
+    color: var(--text-muted);
+    transition: color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .ftr__nav a:hover,
+  .ftr__nav a:focus-visible,
+  .ftr__contact a:hover,
+  .ftr__contact a:focus-visible {
+    color: var(--accent);
+  }
+
+  .ftr__address {
+    margin-block-start: 1.15rem;
+    font-style: normal;
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .ftr__address span {
+    color: var(--text-soft);
+    font-size: 0.8125rem;
+  }
+
+  /* ---------------- social ---------------- */
+  .ftr__social-list {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .ftr__social-list a,
+  .ftr__social-placeholder {
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-circle);
+    color: var(--text-soft);
+    transition:
+      color var(--dur-sm) var(--ease-out-soft),
+      border-color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .ftr__social-list svg {
+    inline-size: 17px;
+    block-size: 17px;
+  }
+
+  .ftr__social-list a:hover,
+  .ftr__social-list a:focus-visible {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .ftr__social-placeholder {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .ftr__soon {
+    margin-block-start: 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--text-soft);
+  }
+
+  /* ---------------- base line ---------------- */
+  .ftr__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-block-start: clamp(3rem, 6vw, 4.5rem);
+    padding-block-start: clamp(1.25rem, 2.5vw, 1.75rem);
+    border-block-start: 1px solid var(--line-soft);
+    font-size: 0.8125rem;
+    color: var(--text-soft);
+  }
+
+  .ftr__domain {
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------------- breakpoints ---------------- */
+  @media (min-width: 640px) {
+    .ftr__inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ftr__brand {
+      grid-column: 1 / -1;
+      margin-block-end: clamp(1rem, 3vw, 2rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ftr__inner {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.7fr) minmax(0, 1fr) minmax(0, 0.8fr);
+      column-gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    .ftr__brand {
+      grid-column: auto;
+      margin-block-end: 0;
+    }
+  }
+</style>

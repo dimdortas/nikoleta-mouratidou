@@ -1,0 +1,497 @@
+---
+import RevealText from './ui/RevealText.astro';
+import Button from './ui/Button.astro';
+import Circles from './ui/Circles.astro';
+import { form, contact } from '../data/site';
+
+const messages = JSON.stringify({
+  success: form.success,
+  successMailto: form.successMailto,
+  error: form.error,
+  submit: form.submit,
+  submitting: form.submitting,
+});
+const errors = JSON.stringify(form.errors);
+---
+
+<section class="cnt section section--lg is-cream" id="epikoinonia" aria-labelledby="epikoinonia-title">
+  <div class="cnt__art" aria-hidden="true">
+    <div class="cnt__art-inner" data-parallax="0.04">
+      <Circles stroke={0.5} fillCore={false} drift={true} />
+    </div>
+  </div>
+
+  <div class="cnt__inner shell">
+    <header class="cnt__head">
+      <p class="eyebrow" data-reveal>Επικοινωνία</p>
+      <h2 class="cnt__title" id="epikoinonia-title">
+        <RevealText text={form.title} stagger={65} />
+      </h2>
+      <p class="cnt__intro lead" data-reveal style="--reveal-delay:150ms">{form.intro}</p>
+    </header>
+
+    <div class="cnt__grid">
+      <!-- ---------------- φόρμα ---------------- -->
+      <form
+        class="cnt__form"
+        data-appointment-form
+        data-endpoint={form.endpoint}
+        data-mailto={contact.email.href}
+        data-messages={messages}
+        data-errors={errors}
+        method="post"
+        action={form.endpoint || contact.email.href}
+        novalidate
+        data-reveal
+      >
+        <div class="cnt__field" data-field>
+          <label for="f-name">{form.fields.name}<span aria-hidden="true"> *</span></label>
+          <input
+            id="f-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            aria-describedby="f-name-err"
+          />
+          <p class="cnt__err" id="f-name-err" data-field-error role="alert"></p>
+        </div>
+
+        <div class="cnt__row">
+          <div class="cnt__field" data-field>
+            <label for="f-phone">{form.fields.phone}<span aria-hidden="true"> *</span></label>
+            <input
+              id="f-phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              required
+              aria-describedby="f-phone-err"
+            />
+            <p class="cnt__err" id="f-phone-err" data-field-error role="alert"></p>
+          </div>
+
+          <div class="cnt__field" data-field>
+            <label for="f-email">{form.fields.email}<span aria-hidden="true"> *</span></label>
+            <input
+              id="f-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              aria-describedby="f-email-err"
+            />
+            <p class="cnt__err" id="f-email-err" data-field-error role="alert"></p>
+          </div>
+        </div>
+
+        <fieldset class="cnt__field cnt__field--choice">
+          <legend>{form.fields.mode}</legend>
+          <div class="cnt__choices">
+            <label class="cnt__choice">
+              <input type="radio" name="mode" value={form.fields.modeInPerson} checked />
+              <span>{form.fields.modeInPerson}</span>
+            </label>
+            <label class="cnt__choice">
+              <input type="radio" name="mode" value={form.fields.modeOnline} />
+              <span>{form.fields.modeOnline}</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="cnt__field" data-field>
+          <label for="f-message">{form.fields.message}</label>
+          <textarea id="f-message" name="message" rows="4" aria-describedby="f-message-hint"
+          ></textarea>
+          <p class="cnt__hint" id="f-message-hint">{form.fields.messageHint}</p>
+        </div>
+
+        <div class="cnt__field cnt__field--consent" data-field>
+          <label class="cnt__consent">
+            <input type="checkbox" name="consent" value="ναι" required />
+            <span>{form.consent}</span>
+          </label>
+          <p class="cnt__err" data-field-error role="alert"></p>
+        </div>
+
+        <div class="cnt__submit">
+          <Button type="submit" variant="solid" size="lg">{form.submit}</Button>
+          <p class="cnt__status" data-form-status hidden role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <!-- ---------------- στοιχεία ---------------- -->
+      <aside class="cnt__details" data-reveal style="--reveal-delay:120ms">
+        <div class="cnt__block">
+          <p class="cnt__label">Τηλέφωνο</p>
+          <a class="cnt__value" href={contact.phoneMobile.href}>{contact.phoneMobile.display}</a>
+          <a class="cnt__value" href={contact.phoneLandline.href}>{contact.phoneLandline.display}</a>
+        </div>
+
+        <div class="cnt__block">
+          <p class="cnt__label">Email</p>
+          <a class="cnt__value cnt__value--email" href={contact.email.href}
+            >{contact.email.display}</a
+          >
+        </div>
+
+        <div class="cnt__block">
+          <p class="cnt__label">Διεύθυνση</p>
+          <address class="cnt__address">
+            <a href={contact.address.mapsUrl} target="_blank" rel="noopener noreferrer">
+              {contact.address.street}<br />
+              {contact.address.city} {contact.address.postal}
+            </a>
+            <span class="cnt__floor">{contact.address.floor}</span>
+          </address>
+        </div>
+
+        <p class="cnt__note">{contact.note}</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cnt {
+    position: relative;
+    overflow: clip;
+  }
+
+  .cnt__art {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .cnt__art-inner {
+    position: absolute;
+    inline-size: min(46vw, 560px);
+    inset-block-end: -18%;
+    inset-inline-start: -12%;
+    opacity: 0.2;
+    translate: 0 var(--parallax-y, 0px);
+  }
+
+  .cnt__inner {
+    position: relative;
+  }
+
+  .cnt__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    max-inline-size: 46ch;
+    margin-block-end: clamp(3rem, 7vw, 5rem);
+  }
+
+  .cnt__title {
+    font-size: var(--fs-h1);
+    line-height: 1.04;
+    letter-spacing: var(--ls-display);
+  }
+
+  .cnt__intro {
+    max-inline-size: 46ch;
+  }
+
+  .cnt__grid {
+    display: grid;
+    gap: clamp(3rem, 7vw, 5rem);
+    align-items: start;
+  }
+
+  /* ---------------- πεδία ---------------- */
+  .cnt__form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .cnt__row {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .cnt__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0;
+    min-inline-size: 0;
+  }
+
+  .cnt__field label,
+  .cnt__field legend {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    padding: 0;
+  }
+
+  .cnt__field input[type='text'],
+  .cnt__field input[type='tel'],
+  .cnt__field input[type='email'],
+  .cnt__field textarea {
+    inline-size: 100%;
+    padding-block: 0.7rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--text);
+    background-color: transparent;
+    border: 0;
+    border-block-end: 1px solid var(--c-olive);
+    border-radius: 0;
+    transition:
+      border-color var(--dur-sm) var(--ease-out-soft),
+      background-color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .cnt__field textarea {
+    resize: vertical;
+    min-block-size: 5.5rem;
+  }
+
+  .cnt__field input:hover,
+  .cnt__field textarea:hover {
+    border-color: var(--c-olive-deep);
+  }
+
+  .cnt__field input:focus,
+  .cnt__field textarea:focus {
+    outline: none;
+    border-color: var(--text);
+    background-color: color-mix(in srgb, var(--c-ivory) 55%, transparent);
+  }
+
+  .cnt__field input:focus-visible,
+  .cnt__field textarea:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .cnt__field.has-error input,
+  .cnt__field.has-error textarea {
+    border-color: var(--accent);
+  }
+
+  .cnt__err {
+    font-size: 0.8125rem;
+    font-weight: var(--fw-medium);
+    line-height: 1.5;
+    color: var(--accent);
+  }
+
+  .cnt__err:empty {
+    display: none;
+  }
+
+  .cnt__hint {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* ---------------- επιλογές ---------------- */
+  .cnt__field--choice {
+    gap: 0.9rem;
+  }
+
+  .cnt__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .cnt__choice {
+    position: relative;
+  }
+
+  .cnt__choice input {
+    position: absolute;
+    opacity: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .cnt__choice span {
+    display: block;
+    padding: 0.72rem 1.35rem;
+    font-family: var(--font-ui);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--text-muted);
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    transition:
+      color var(--dur-sm) var(--ease-out-soft),
+      border-color var(--dur-sm) var(--ease-out-soft),
+      background-color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .cnt__choice:hover span {
+    border-color: var(--c-olive);
+  }
+
+  .cnt__choice input:checked + span {
+    color: var(--c-ivory);
+    background-color: var(--c-olive-deep);
+    border-color: var(--c-olive-deep);
+  }
+
+  .cnt__choice input:focus-visible + span {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  /* ---------------- συγκατάθεση ---------------- */
+  .cnt__field--consent {
+    margin-block-start: 0.25rem;
+  }
+
+  .cnt__field .cnt__consent {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.85rem;
+    align-items: start;
+    font-size: 0.8125rem;
+    font-weight: var(--fw-regular);
+    letter-spacing: normal;
+    line-height: 1.6;
+    text-transform: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    max-inline-size: 54ch;
+  }
+
+  .cnt__consent input {
+    inline-size: 17px;
+    block-size: 17px;
+    margin-block-start: 0.2rem;
+    accent-color: var(--c-olive-deep);
+    cursor: pointer;
+  }
+
+  .cnt__field--consent.has-error .cnt__consent {
+    color: var(--accent);
+  }
+
+  /* ---------------- υποβολή ---------------- */
+  .cnt__submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    margin-block-start: 0.5rem;
+  }
+
+  .cnt__status {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-inline-size: 38ch;
+  }
+
+  .cnt__status[data-tone='ok'] {
+    color: var(--c-olive-deep);
+  }
+
+  .cnt__status[data-tone='bad'] {
+    color: var(--accent);
+  }
+
+  /* ---------------- στοιχεία επικοινωνίας ---------------- */
+  .cnt__details {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .cnt__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-block-start: clamp(1rem, 2vw, 1.35rem);
+    border-block-start: 1px solid var(--line);
+  }
+
+  .cnt__label {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-block-end: 0.35rem;
+  }
+
+  .cnt__value,
+  .cnt__address a {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+    line-height: 1.5;
+    color: var(--text);
+    transition: color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .cnt__value--email {
+    font-size: clamp(1rem, 0.9rem + 0.45vw, 1.1875rem);
+    word-break: break-word;
+  }
+
+  .cnt__value:hover,
+  .cnt__value:focus-visible,
+  .cnt__address a:hover,
+  .cnt__address a:focus-visible {
+    color: var(--accent);
+  }
+
+  .cnt__address {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .cnt__floor {
+    font-family: var(--font-ui);
+    font-size: var(--fs-small);
+    color: var(--text-soft);
+  }
+
+  .cnt__note {
+    font-size: 0.875rem;
+    line-height: 1.72;
+    color: var(--text-muted);
+    max-inline-size: 34ch;
+    padding-inline-start: 1.15rem;
+    border-inline-start: 1px solid var(--c-olive-mist);
+  }
+
+  /* ---------------- breakpoints ---------------- */
+  @media (min-width: 560px) {
+    .cnt__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .cnt__grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+      column-gap: clamp(3rem, 8vw, 7rem);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .cnt__grid {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    }
+  }
+</style>

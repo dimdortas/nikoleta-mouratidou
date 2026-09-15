@@ -1,0 +1,126 @@
+---
+import '../styles/tokens.css';
+import '../styles/fonts.css';
+import '../styles/base.css';
+
+import { site, seo, contact, faq } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = seo.title, description = seo.description } = Astro.props;
+
+/* Τα αρχεία του /public σερβίρονται κάτω από το base — χρειάζεται πρόθεμα
+   ώστε να δουλεύουν και σε δημοσίευση μέσα σε υποφάκελο. */
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${base}${path}`;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+
+/* Προσωρινές δημοσιεύσεις (staging) δεν πρέπει να μπαίνουν στη Google και να
+   ανταγωνίζονται το κανονικό domain. */
+const isPreview = base !== '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['Psychologist', 'LocalBusiness'],
+      '@id': `${site.url}#practice`,
+      name: `${site.name}, ${site.credential}`,
+      description: seo.description,
+      url: site.url,
+      telephone: ['+30 698 341 7809', '+30 2310 915317'],
+      email: contact.email.display,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: contact.address.street,
+        addressLocality: contact.address.city,
+        postalCode: contact.address.postal,
+        addressCountry: 'GR',
+      },
+      areaServed: 'Θεσσαλονίκη',
+      availableLanguage: 'el',
+      founder: { '@id': `${site.url}#person` },
+    },
+    {
+      '@type': 'Person',
+      '@id': `${site.url}#person`,
+      name: site.fullName,
+      honorificSuffix: site.credential,
+      jobTitle: 'Ψυχολόγος — Συστημική Ψυχοθεραπεύτρια',
+      url: site.url,
+      alumniOf: [
+        { '@type': 'CollegeOrUniversity', name: 'Αριστοτέλειο Πανεπιστήμιο Θεσσαλονίκης' },
+        { '@type': 'CollegeOrUniversity', name: 'Ελληνικό Ανοικτό Πανεπιστήμιο' },
+      ],
+      worksFor: { '@id': `${site.url}#practice` },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${site.url}#faq`,
+      mainEntity: faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="el">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="theme-color" content="#e7e1d6" />
+    <meta name="color-scheme" content="light" />
+    <meta name="author" content={site.fullName} />
+    <meta
+      name="robots"
+      content={isPreview ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="el_GR" />
+    <meta property="og:site_name" content={`${site.name}, ${site.credential}`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(asset('/og-image.png'), canonical).href} />
+    <meta property="og:image:alt" content={seo.ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href={asset('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bona+Nova:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap"
+    />
+
+    <script is:inline>
+      // Πριν το πρώτο paint: σημαδεύουμε ότι υπάρχει JS, ώστε το σύστημα
+      // reveal να ξεκινά κρυφό χωρίς αναλαμπή περιεχομένου.
+      document.documentElement.classList.add('js');
+    </script>
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Μετάβαση στο περιεχόμενο</a>
+    <slot />
+  </body>
+</html>

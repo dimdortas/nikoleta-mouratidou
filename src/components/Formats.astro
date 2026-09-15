@@ -1,0 +1,248 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { formats, contact, images } from '../data/site';
+---
+
+<section class="fmt section is-cream" aria-labelledby="fmt-title">
+  <div class="fmt__inner shell">
+    <header class="fmt__head">
+      <p class="eyebrow" data-reveal>Τρόποι συνεδριών</p>
+      <h2 class="fmt__title" id="fmt-title">
+        <RevealText text={formats.title} stagger={60} />
+      </h2>
+      <p class="fmt__intro lead" data-reveal style="--reveal-delay:140ms">{formats.intro}</p>
+    </header>
+
+    <div class="fmt__grid">
+      <!-- Δια ζώσης -->
+      <article class="fmt__item" data-reveal>
+        <span class="fmt__index" aria-hidden="true">{formats.items[0].index}</span>
+        <h3 class="fmt__h">{formats.items[0].title}</h3>
+        <p class="fmt__text">{formats.items[0].text}</p>
+
+        <div class="fmt__detail">
+          <p class="fmt__detail-label">{formats.items[0].detailLabel}</p>
+          <address class="fmt__address">
+            <a href={contact.address.mapsUrl} target="_blank" rel="noopener noreferrer">
+              {contact.address.street}<br />
+              <span class="fmt__city">{contact.address.city} {contact.address.postal}</span><br />
+              <span class="fmt__floor">{contact.address.floor}</span>
+            </a>
+            <span class="sr-only">(άνοιγμα σε χάρτη, νέα καρτέλα)</span>
+          </address>
+        </div>
+      </article>
+
+      <!-- Εικόνα ανάμεσα στα δύο -->
+      <figure class="fmt__media" data-reveal="fade" aria-hidden="true">
+        <img
+          src={`${images.light.src}?auto=format&fit=crop&w=760&h=1010&q=74`}
+          alt=""
+          width="760"
+          height="1010"
+          loading="lazy"
+          decoding="async"
+          data-parallax="0.06"
+        />
+      </figure>
+
+      <!-- Online -->
+      <article class="fmt__item fmt__item--online" data-reveal style="--reveal-delay:120ms">
+        <span class="fmt__index" aria-hidden="true">{formats.items[1].index}</span>
+        <h3 class="fmt__h">{formats.items[1].title}</h3>
+        <p class="fmt__text">{formats.items[1].text}</p>
+
+        <div class="fmt__detail">
+          <p class="fmt__detail-label">{formats.items[1].detailLabel}</p>
+          <p class="fmt__detail-text">{formats.items[1].detail}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fmt__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    max-inline-size: 44ch;
+    margin-block-end: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .fmt__title {
+    font-size: var(--fs-h2);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+  }
+
+  .fmt__intro {
+    max-inline-size: 42ch;
+  }
+
+  /* ---------------- grid ---------------- */
+  .fmt__grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .fmt__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block-start: clamp(1.5rem, 3vw, 2rem);
+    border-block-start: 1px solid var(--c-olive);
+  }
+
+  .fmt__index {
+    font-family: var(--font-display);
+    font-size: var(--fs-small);
+    letter-spacing: 0.22em;
+    color: var(--accent);
+  }
+
+  .fmt__h {
+    font-size: var(--fs-h3);
+    line-height: 1.18;
+  }
+
+  .fmt__text {
+    font-size: var(--fs-body);
+    line-height: 1.72;
+    color: var(--text-muted);
+    max-inline-size: 40ch;
+  }
+
+  .fmt__detail {
+    margin-block-start: clamp(0.75rem, 2vw, 1.5rem);
+    padding-block-start: clamp(1rem, 2vw, 1.5rem);
+    border-block-start: 1px solid var(--line-soft);
+  }
+
+  .fmt__detail-label {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-block-end: 0.75rem;
+  }
+
+  .fmt__address {
+    font-style: normal;
+  }
+
+  .fmt__address a {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    line-height: 1.45;
+    color: var(--text);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.28em;
+    transition:
+      color var(--dur-sm) var(--ease-out-soft),
+      text-decoration-color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .fmt__address a:hover,
+  .fmt__address a:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .fmt__floor {
+    font-family: var(--font-ui);
+    font-size: var(--fs-small);
+    color: var(--text-soft);
+  }
+
+  .fmt__city {
+    white-space: nowrap;
+  }
+
+  .fmt__detail-text {
+    font-size: var(--fs-small);
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-inline-size: 36ch;
+  }
+
+  /* ---------------- εικόνα ---------------- */
+  .fmt__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 999px 999px 999px 999px;
+    aspect-ratio: 3 / 4;
+  }
+
+  .fmt__media img {
+    inline-size: 100%;
+    block-size: 108%;
+    object-fit: cover;
+    translate: 0 calc(var(--parallax-y, 0px) - 4%);
+    filter: saturate(0.82);
+  }
+
+  /* ---------------- breakpoints ---------------- */
+  /* Tablet: δύο στήλες κειμένου, η εικόνα από κάτω ως ξεχωριστή σύνθεση */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .fmt__grid {
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(2rem, 5vw, 3.5rem);
+      row-gap: clamp(3rem, 6vw, 4.5rem);
+      align-items: start;
+    }
+
+    .fmt__item {
+      grid-row: 1;
+    }
+
+    .fmt__item:first-of-type {
+      grid-column: 1;
+    }
+
+    .fmt__item--online {
+      grid-column: 2;
+    }
+
+    .fmt__media {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      inline-size: 46%;
+      margin-inline-start: auto;
+    }
+  }
+
+  /* Desktop: η εικόνα μπαίνει ανάμεσα στις δύο στήλες */
+  @media (min-width: 1024px) {
+    .fmt__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr) minmax(0, 1fr);
+      column-gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: start;
+    }
+
+    .fmt__media {
+      margin-block-start: clamp(2rem, 6vw, 5rem);
+    }
+
+    .fmt__item--online {
+      margin-block-start: clamp(3rem, 9vw, 7rem);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .fmt__media {
+      max-inline-size: 60%;
+      margin-inline: auto;
+      order: 3;
+    }
+
+    .fmt__item--online {
+      order: 2;
+    }
+  }
+</style>

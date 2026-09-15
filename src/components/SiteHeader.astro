@@ -1,0 +1,348 @@
+---
+import Logo from './ui/Logo.astro';
+import Button from './ui/Button.astro';
+import { nav, cta, contact } from '../data/site';
+---
+
+<header class="hdr" data-header>
+  <div class="hdr__inner shell shell--wide">
+    <Logo />
+
+    <nav class="hdr__nav" aria-label="Κύρια πλοήγηση">
+      <ul class="hdr__list">
+        {
+          nav.map((item) => (
+            <li>
+              <a class="hdr__link" href={item.href} data-nav-link data-scroll>
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="hdr__actions">
+      <span class="hdr__cta">
+        <Button href={cta.primary.href} variant="outline" size="sm">{cta.primary.label}</Button>
+      </span>
+
+      <button
+        class="hdr__burger"
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <span class="sr-only">Άνοιγμα μενού</span>
+        <span class="hdr__burger-bars" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+
+  <span class="hdr__hairline" aria-hidden="true"></span>
+
+  <!-- Mobile panel -->
+  <div class="hdr__panel" id="site-menu" data-menu-panel>
+    <nav class="hdr__panel-nav" aria-label="Πλοήγηση (κινητό)">
+      <ul>
+        {
+          nav.map((item, i) => (
+            <li style={`--i:${i}`}>
+              <a href={item.href} data-scroll>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="hdr__panel-foot">
+      <span class="hdr__panel-cta">
+        <Button href={cta.primary.href} variant="solid" size="lg">{cta.primary.label}</Button>
+      </span>
+      <div class="hdr__panel-contact">
+        <a href={contact.phoneMobile.href}>{contact.phoneMobile.display}</a>
+        <a href={contact.email.href}>{contact.email.display}</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--z-header);
+    transition:
+      transform var(--dur-md) var(--ease-out-soft),
+      background-color var(--dur-md) var(--ease-out-soft),
+      backdrop-filter var(--dur-md) var(--ease-out-soft);
+  }
+
+  .hdr.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  .hdr__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    block-size: var(--header-h);
+  }
+
+  /* Η γραμμή και το φόντο εμφανίζονται σταδιακά στο scroll */
+  .hdr__hairline {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 1px;
+    background-color: var(--line);
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+    transition:
+      transform var(--dur-lg) var(--ease-out-soft),
+      opacity var(--dur-md) var(--ease-out-soft);
+  }
+
+  .hdr.is-stuck {
+    background-color: color-mix(in srgb, var(--c-ivory) 86%, transparent);
+    backdrop-filter: saturate(1.1) blur(14px);
+    -webkit-backdrop-filter: saturate(1.1) blur(14px);
+  }
+
+  .hdr.is-stuck .hdr__hairline {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  /* ---------- nav ---------- */
+  .hdr__nav {
+    display: none;
+  }
+
+  .hdr__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.4vw, 2.5rem);
+  }
+
+  .hdr__link {
+    position: relative;
+    display: block;
+    padding-block: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .hdr__link span {
+    position: relative;
+  }
+
+  .hdr__link span::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -0.35em;
+    block-size: 1px;
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-md) var(--ease-out-soft);
+  }
+
+  .hdr__link:hover,
+  .hdr__link:focus-visible,
+  .hdr__link.is-active {
+    color: var(--text);
+  }
+
+  .hdr__link:hover span::after,
+  .hdr__link:focus-visible span::after,
+  .hdr__link.is-active span::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* ---------- actions ---------- */
+  .hdr__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+  }
+
+  .hdr__cta {
+    display: none;
+  }
+
+  .hdr__burger {
+    inline-size: 44px;
+    block-size: 44px;
+    margin-inline-end: -10px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-circle);
+  }
+
+  .hdr__burger-bars {
+    display: block;
+    inline-size: 22px;
+  }
+
+  .hdr__burger-bars i {
+    display: block;
+    block-size: 1px;
+    background-color: var(--text);
+    transition: transform var(--dur-sm) var(--ease-out-soft);
+  }
+
+  .hdr__burger-bars i:first-child {
+    margin-block-end: 6px;
+  }
+
+  .hdr.is-open .hdr__burger-bars i:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .hdr.is-open .hdr__burger-bars i:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  /* ---------- mobile panel ---------- */
+  .hdr__panel {
+    position: fixed;
+    inset: var(--header-h) 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--sp-8);
+    padding: clamp(2rem, 7vw, 3.5rem) var(--gutter) calc(var(--gutter) + 1.5rem);
+    background-color: var(--c-ivory);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity var(--dur-md) var(--ease-out-soft),
+      transform var(--dur-md) var(--ease-out-soft),
+      visibility var(--dur-md);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .hdr.is-open .hdr__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .hdr.is-open {
+    background-color: var(--c-ivory);
+  }
+
+  .hdr__panel-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.75rem, 2.4vw, 1.25rem);
+  }
+
+  .hdr__panel-nav a {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 8vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: var(--ls-heading);
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity var(--dur-md) var(--ease-out-soft),
+      transform var(--dur-md) var(--ease-out-soft);
+    transition-delay: calc(var(--i) * 55ms + 90ms);
+  }
+
+  .hdr.is-open .hdr__panel-nav a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hdr__panel-foot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-5);
+    padding-block-start: var(--sp-6);
+    border-block-start: 1px solid var(--line);
+  }
+
+  @media (min-width: 760px) {
+    .hdr__panel-cta {
+      display: none;
+    }
+  }
+
+  .hdr__panel-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .hdr__panel-contact a:hover {
+    color: var(--accent);
+  }
+
+  /* ---------- breakpoints ---------- */
+  /* Από ~760px το CTA στέκεται δίπλα στο μενού — η κύρια ενέργεια
+     παραμένει ορατή ακόμη κι όταν η πλοήγηση είναι στο πλήρες μενού. */
+  @media (min-width: 760px) {
+    .hdr__cta {
+      display: inline-flex;
+    }
+  }
+
+  /* Η οριζόντια πλοήγηση εμφανίζεται μόνο όταν χωρά άνετα δίπλα στο
+     πλήρες λογότυπο και το CTA — αλλιώς μένει στο πλήρες μενού. */
+  @media (min-width: 1100px) and (max-width: 1279px) {
+    .hdr__inner {
+      gap: 1rem;
+    }
+
+    .hdr__list {
+      gap: 1.1rem;
+    }
+
+    .hdr__link {
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .hdr__nav {
+      display: block;
+    }
+
+    .hdr__burger {
+      display: none;
+    }
+
+    .hdr__panel {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hdr,
+    .hdr__panel,
+    .hdr__panel-nav a {
+      transition: none;
+    }
+  }
+</style>

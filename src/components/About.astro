@@ -1,0 +1,304 @@
+---
+import RevealText from './ui/RevealText.astro';
+import { about, images, site } from '../data/site';
+import { keepSeparators } from '../lib/text';
+---
+
+<section class="abt section section--lg" id="sxetika" aria-labelledby="sxetika-title">
+  <div class="abt__inner shell shell--wide">
+    <!-- Εικόνα: προσωρινή, editorial — αντικαθίσταται από φωτογραφία -->
+    <figure class="abt__media">
+      <div class="abt__frame" data-reveal="scale">
+        <img
+          class="abt__img"
+          src={`${images.about.src}?auto=format&fit=crop&w=1000&h=1330&q=76`}
+          srcset={`${images.about.src}?auto=format&fit=crop&w=560&h=745&q=76 560w, ${images.about.src}?auto=format&fit=crop&w=1000&h=1330&q=76 1000w`}
+          sizes="(min-width: 1024px) 42vw, (min-width: 768px) 46vw, 84vw"
+          alt={images.about.alt}
+          width="1000"
+          height="1330"
+          loading="lazy"
+          decoding="async"
+          data-parallax="0.05"
+        />
+      </div>
+      <span class="abt__ring" aria-hidden="true" data-parallax="0.1"></span>
+      <figcaption class="abt__caption">
+        <span>{keepSeparators(site.practiceFor)}</span>
+      </figcaption>
+    </figure>
+
+    <div class="abt__content">
+      <p class="eyebrow" data-reveal>Σχετικά</p>
+      <h2 class="abt__title" id="sxetika-title">
+        <RevealText text={about.title} stagger={55} />
+      </h2>
+
+      <p class="abt__intro" data-reveal style="--reveal-delay:120ms">{about.intro}</p>
+
+      <div class="abt__prose">
+        {
+          about.body.map((p, i) => (
+            <p data-reveal style={`--reveal-delay:${140 + i * 80}ms`}>
+              {p}
+            </p>
+          ))
+        }
+      </div>
+
+      <dl class="abt__creds" data-reveal>
+        {
+          about.credentials.map((c) => (
+            <div class="abt__cred">
+              <dt>{c.label}</dt>
+              <dd>{c.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <p class="abt__accreditation" data-reveal>{about.accreditation}</p>
+
+      <div class="abt__exp" data-reveal>
+        <p class="abt__exp-label">{about.experienceLabel}</p>
+        <ul>
+          {about.experience.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .abt {
+    position: relative;
+    overflow: clip;
+  }
+
+  .abt__inner {
+    display: grid;
+    gap: clamp(3rem, 7vw, 5rem);
+    align-items: start;
+  }
+
+  /* ---------------- εικόνα ---------------- */
+  .abt__media {
+    position: relative;
+  }
+
+  .abt__frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 999px 999px var(--r-sm) var(--r-sm);
+    aspect-ratio: 3 / 4;
+    background-color: var(--c-ivory-warm);
+  }
+
+  .abt__img {
+    inline-size: 100%;
+    block-size: 106%;
+    object-fit: cover;
+    object-position: 50% 45%;
+    translate: 0 calc(var(--parallax-y, 0px) - 3%);
+    filter: saturate(0.88) contrast(1.02);
+  }
+
+  /* Κύκλος που τέμνει την εικόνα — γλώσσα του σήματος */
+  .abt__ring {
+    position: absolute;
+    inline-size: clamp(7rem, 20vw, 15rem);
+    aspect-ratio: 1;
+    inset-block-start: 12%;
+    inset-inline-end: -12%;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+    opacity: 0.55;
+    translate: 0 var(--parallax-y, 0px);
+    pointer-events: none;
+  }
+
+  .abt__caption {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-block-start: 1.5rem;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.12em;
+    line-height: 1.6;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .abt__caption::before {
+    content: '';
+    inline-size: 2rem;
+    block-size: 1px;
+    background-color: var(--c-olive);
+    flex: none;
+  }
+
+  /* ---------------- κείμενο ---------------- */
+  .abt__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 2.6vw, 1.75rem);
+  }
+
+  .abt__title {
+    font-size: var(--fs-h2);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+    margin-block-start: 0.5rem;
+  }
+
+  .abt__intro {
+    font-size: var(--fs-lead);
+    line-height: 1.68;
+    color: var(--text);
+    max-inline-size: 54ch;
+    margin-block-start: 0.5rem;
+  }
+
+  .abt__prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    max-inline-size: 58ch;
+    color: var(--text-muted);
+  }
+
+  /* ---------------- τυπικά προσόντα ---------------- */
+  .abt__creds {
+    display: grid;
+    gap: 0;
+    margin-block-start: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  .abt__cred {
+    display: grid;
+    gap: 0.3rem 2rem;
+    padding-block: 1.1rem;
+    border-block-start: 1px solid var(--line-soft);
+  }
+
+  .abt__cred:last-child {
+    border-block-end: 1px solid var(--line-soft);
+  }
+
+  .abt__cred dt {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    line-height: 1.8;
+  }
+
+  .abt__cred dd {
+    font-size: var(--fs-small);
+    line-height: 1.62;
+    color: var(--text);
+  }
+
+  .abt__accreditation {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-inline-size: 62ch;
+    padding-inline-start: 1.15rem;
+    border-inline-start: 1px solid var(--c-olive-mist);
+  }
+
+  /* ---------------- κλινική εμπειρία ---------------- */
+  .abt__exp {
+    margin-block-start: clamp(0.5rem, 2vw, 1.25rem);
+  }
+
+  .abt__exp-label {
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-block-end: 1rem;
+  }
+
+  .abt__exp ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .abt__exp li {
+    position: relative;
+    padding-block: 0.85rem;
+    padding-inline-start: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.66;
+    color: var(--text-muted);
+    border-block-start: 1px solid var(--line-soft);
+    max-inline-size: 64ch;
+  }
+
+  .abt__exp li:first-child {
+    border-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  .abt__exp li::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 1.55em;
+    inset-inline-start: 0;
+    inline-size: 5px;
+    block-size: 5px;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+  }
+
+  .abt__exp li:first-child::before {
+    inset-block-start: 0.7em;
+  }
+
+  /* ---------------- breakpoints ---------------- */
+  @media (min-width: 560px) {
+    .abt__cred {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .abt__inner {
+      grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+      column-gap: clamp(2.5rem, 6vw, 6rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .abt__inner {
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+      column-gap: clamp(4rem, 8vw, 8rem);
+    }
+
+    .abt__media {
+      position: sticky;
+      inset-block-start: calc(var(--header-h) + 3rem);
+    }
+
+    .abt__cred {
+      grid-template-columns: 10rem minmax(0, 1fr);
+    }
+  }
+
+  /* Κάτω από 900: στοίβα, με την εικόνα σε ελεγχόμενο πλάτος */
+  @media (max-width: 899px) {
+    .abt__media {
+      max-inline-size: min(78%, 420px);
+    }
+
+    .abt__ring {
+      inset-inline-end: -18%;
+    }
+  }
+</style>
