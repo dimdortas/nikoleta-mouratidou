@@ -31,12 +31,14 @@ import SiteFooter from '../components/SiteFooter.astro';
 
 <script>
   import { initMotion } from '../scripts/motion';
+  import { initHeroArt } from '../scripts/hero-art';
   import { initHeader } from '../scripts/header';
   import { initDisclosures } from '../scripts/disclosure';
   import { initForm } from '../scripts/form';
 
   const boot = () => {
     initMotion();
+    initHeroArt();
     initHeader();
     initDisclosures();
     initForm();

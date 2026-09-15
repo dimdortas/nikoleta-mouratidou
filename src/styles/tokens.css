@@ -30,10 +30,10 @@
   /* Οι αποχρώσεις κειμένου είναι σκουρότερες από τις έντυπες ώστε να
      περνούν WCAG AA (≥4.5:1) και πάνω στο κρεμ #E7E1D6.
      Οι αυθεντικές τιμές της ταυτότητας παραμένουν ως --c-* primitives. */
-  --text-muted: #5c5850;
-  --text-soft: #63614c;
-  --text-on-deep: #ece7dc;
-  --text-on-deep-muted: #a8a894;
+  --text-muted: #4f4c46;
+  --text-soft: #5a5743;
+  --text-on-deep: #f0ece2;
+  --text-on-deep-muted: #bcbca8;
 
   --line: var(--c-rule);
   --line-soft: rgba(48, 47, 46, 0.1);
@@ -70,9 +70,13 @@
   --ls-label: 0.16em;
   --ls-body: 0.004em;
 
+  /* Η Manrope σε ελληνικά, πάνω σε κρεμ, χρειάζεται μεγαλύτερο βάρος
+     από το συνηθισμένο για να διαβάζεται άνετα — γι' αυτό το σώμα
+     τρέχει σε 500 και τα (μικρά, αραιωμένα, κεφαλαία) labels σε 600. */
   --fw-light: 300;
   --fw-regular: 400;
-  --fw-medium: 500;
+  --fw-body: 500;
+  --fw-medium: 600;
   --fw-bold: 700;
 
   /* ---------- Spacing (4px base) ---------- */

@@ -6,13 +6,23 @@ import { site, hero, cta } from '../data/site';
 ---
 
 <section class="hero" id="top">
-  <!-- Γραφική σύνθεση: υπερμεγέθεις κύκλοι που κόβονται από την άκρη -->
-  <div class="hero__art" aria-hidden="true">
-    <div class="hero__art-inner" data-parallax="0.06">
-      <Circles stroke={0.55} fillCore={true} drift={true} />
+  <!-- Γραφική σύνθεση: υπερμεγέθεις κύκλοι, τροχιές και λεπτές γραμμές.
+       Με ποντίκι, όλα κινούνται ελαφρά προς τον κέρσορα και το σήμα
+       «μαζεύεται» — οι τρεις κύκλοι πλησιάζουν και ενώνονται. -->
+  <div class="hero__art" data-hero-art aria-hidden="true">
+    <span class="hero__rule hero__rule--a" data-pull="0.2"></span>
+    <span class="hero__rule hero__rule--b" data-pull="0.34"></span>
+    <span class="hero__rule hero__rule--c" data-pull="0.46"></span>
+
+    <span class="hero__orb hero__orb--a" data-pull="0.22" data-parallax="-0.04"></span>
+    <span class="hero__orb hero__orb--b" data-pull="0.4" data-parallax="0.03"></span>
+    <span class="hero__orb hero__orb--c" data-pull="0.62"></span>
+    <span class="hero__orb hero__orb--d" data-pull="0.8"></span>
+    <span class="hero__orb hero__orb--e" data-pull="0.3"></span>
+
+    <div class="hero__art-inner" data-pull="0.26" data-parallax="0.06">
+      <Circles stroke={0.55} fillCore={true} drift={true} interactive={true} />
     </div>
-    <span class="hero__orbit hero__orbit--1" data-parallax="-0.04"></span>
-    <span class="hero__orbit hero__orbit--2" data-parallax="0.03"></span>
   </div>
 
   <div class="hero__inner shell shell--wide">
@@ -69,39 +79,90 @@ import { site, hero, cta } from '../data/site';
     pointer-events: none;
   }
 
+  /* Το σήμα */
   .hero__art-inner {
     position: absolute;
     inset-block-start: 50%;
     inset-inline-end: -14%;
     inline-size: min(62vw, 780px);
-    translate: 0 calc(-50% + var(--parallax-y, 0px));
+    translate: var(--px, 0px) calc(-50% + var(--parallax-y, 0px) + var(--py, 0px));
     color: var(--c-olive);
     opacity: 0.55;
   }
 
-  /* Δύο ακόμη τροχιές, πολύ διακριτικές */
-  .hero__orbit {
+  /* Τροχιές — λεπτοί κύκλοι σε διαφορετικές κλίμακες */
+  .hero__orb {
     position: absolute;
+    aspect-ratio: 1;
     border: 1px solid var(--c-olive);
     border-radius: var(--r-circle);
-    opacity: 0.16;
+    translate: var(--px, 0px) calc(var(--parallax-y, 0px) + var(--py, 0px));
   }
 
-  .hero__orbit--1 {
+  .hero__orb--a {
     inline-size: min(52vw, 620px);
-    aspect-ratio: 1;
     inset-block-start: -22%;
     inset-inline-start: -16%;
-    translate: 0 var(--parallax-y, 0px);
+    opacity: 0.15;
   }
 
-  .hero__orbit--2 {
+  .hero__orb--b {
     inline-size: min(30vw, 340px);
-    aspect-ratio: 1;
-    inset-block-end: -12%;
-    inset-inline-start: 32%;
-    translate: 0 var(--parallax-y, 0px);
-    opacity: 0.1;
+    inset-block-end: -14%;
+    inset-inline-start: 30%;
+    opacity: 0.11;
+  }
+
+  .hero__orb--c {
+    inline-size: min(13vw, 168px);
+    inset-block-start: 11%;
+    inset-inline-end: 7%;
+    opacity: 0.2;
+  }
+
+  .hero__orb--d {
+    inline-size: min(5.5vw, 70px);
+    inset-block-start: 57%;
+    inset-inline-start: 41%;
+    opacity: 0.28;
+  }
+
+  .hero__orb--e {
+    inline-size: min(22vw, 265px);
+    inset-block-end: 3%;
+    inset-inline-start: -10%;
+    opacity: 0.12;
+  }
+
+  /* Γραμμικά — λεπτές γραμμές που κρατούν τη σύνθεση «αρχιτεκτονική» */
+  .hero__rule {
+    position: absolute;
+    background-color: var(--c-olive);
+    translate: var(--px, 0px) var(--py, 0px);
+  }
+
+  .hero__rule--a {
+    inset-block-start: 50%;
+    inset-inline-start: 0;
+    inline-size: min(17vw, 220px);
+    block-size: 1px;
+    opacity: 0.3;
+  }
+
+  .hero__rule--b {
+    inset-block-start: 0;
+    inset-inline-start: 61%;
+    inline-size: 1px;
+    block-size: min(16vh, 130px);
+    opacity: 0.22;
+  }
+
+  .hero__rule--c {
+    inset-block-start: 77%;
+    inset-inline-end: 5%;
+    inline-size: min(14vw, 185px);
+    block-size: 1px;
+    opacity: 0.26;
   }
 
   /* ---------------- περιεχόμενο ---------------- */
@@ -238,14 +299,34 @@ import { site, hero, cta } from '../data/site';
       opacity: 0.26;
     }
 
-    .hero__orbit--1 {
+    /* Στο κινητό μένουν μόνο δύο διακριτικές τροχιές — τίποτα άλλο */
+    .hero__orb--a {
       inline-size: 86vw;
       inset-block-start: -14%;
       inset-inline-start: -34%;
     }
 
-    .hero__orbit--2 {
+    .hero__orb--b,
+    .hero__orb--c,
+    .hero__rule--b,
+    .hero__rule--c {
       display: none;
+    }
+
+    .hero__orb--d {
+      inline-size: 54px;
+      inset-block-start: 63%;
+      inset-inline-start: 8%;
+    }
+
+    .hero__orb--e {
+      inline-size: 46vw;
+      inset-block-end: 1%;
+    }
+
+    .hero__rule--a {
+      inline-size: 34vw;
+      inset-block-start: 56%;
     }
 
     .hero__name {

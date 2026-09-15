@@ -23,7 +23,7 @@ body {
   color: var(--text);
   font-family: var(--font-ui);
   font-size: var(--fs-body);
-  font-weight: var(--fw-regular);
+  font-weight: var(--fw-body);
   line-height: var(--lh-body);
   letter-spacing: var(--ls-body);
   -webkit-font-smoothing: antialiased;

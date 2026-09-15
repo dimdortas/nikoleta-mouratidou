@@ -3,16 +3,20 @@
  * Το σήμα των τριών τεμνόμενων κύκλων, ξαναχτισμένο ως γεωμετρία.
  * Αναλογίες παρμένες από το logo.pdf:
  *   ισόπλευρο τρίγωνο κέντρων, ακτίνα κύκλου ≈ 1.62 × περίκεντρη ακτίνα.
+ *
+ * Κάθε κύκλος είναι ένας «κόμβος» (n1/n2/n3). Η κλάση του κόμβου μπαίνει
+ * ΚΑΙ στον ορατό κύκλο ΚΑΙ στον αντίστοιχο κύκλο του clipPath, ώστε η τομή
+ * να ακολουθεί πάντα τους κύκλους — και στην αργή κίνηση και στη σύγκλιση.
  */
 interface Props {
   /** Πάχος γραμμής στο σύστημα συντεταγμένων του viewBox (200×200). */
   stroke?: number;
   /** Γέμισμα της τριπλής τομής. */
   fillCore?: boolean;
-  /** Αργή, συνεχής περιστροφή/αναπνοή. */
+  /** Αργή, συνεχής κίνηση. */
   drift?: boolean;
-  /** Ετικέτες γύρω από κάθε κύκλο (συστημική τομή). */
-  labels?: [string, string, string] | null;
+  /** Επιτρέπει σύγκλιση μέσω της μεταβλητής --cv (0→1). */
+  interactive?: boolean;
   class?: string;
   title?: string;
 }
@@ -21,7 +25,7 @@ const {
   stroke = 1,
   fillCore = true,
   drift = false,
-  labels = null,
+  interactive = false,
   class: className = '',
   title,
 } = Astro.props;
@@ -35,22 +39,22 @@ const C = [
   { cx: 68, cy: 127.5 },
   { cx: 132, cy: 127.5 },
 ] as const;
-
-const labelPos = [
-  { x: 100, y: 18, anchor: 'middle' },
-  { x: 6, y: 176, anchor: 'start' },
-  { x: 194, y: 176, anchor: 'end' },
-] as const;
 ---
 
 <svg
-  class:list={['circles', drift && 'circles--drift', className]}
+  class:list={[
+    'circles',
+    drift && 'circles--drift',
+    interactive && 'circles--interactive',
+    className,
+  ]}
   viewBox="0 0 200 200"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   role={title ? 'img' : 'presentation'}
   aria-hidden={title ? undefined : 'true'}
   aria-label={title}
+  data-converge={interactive ? '' : undefined}
 >
   {title && <title>{title}</title>}
 
@@ -58,57 +62,51 @@ const labelPos = [
     fillCore && (
       <defs>
         <clipPath id={`${uid}-a`}>
-          <circle cx={C[0].cx} cy={C[0].cy} r={R} />
+          <circle class="circles__n1" cx={C[0].cx} cy={C[0].cy} r={R} />
         </clipPath>
         <clipPath id={`${uid}-b`} clip-path={`url(#${uid}-a)`}>
-          <circle cx={C[1].cx} cy={C[1].cy} r={R} />
+          <circle class="circles__n2" cx={C[1].cx} cy={C[1].cy} r={R} />
+        </clipPath>
+        <clipPath id={`${uid}-c`} clip-path={`url(#${uid}-b)`}>
+          <circle class="circles__n3" cx={C[2].cx} cy={C[2].cy} r={R} />
         </clipPath>
       </defs>
     )
   }
 
-  <g class="circles__ring circles__ring--1">
+  <g class="circles__ring circles__n1">
     <circle cx={C[0].cx} cy={C[0].cy} r={R} stroke="currentColor" stroke-width={stroke} />
   </g>
-  <g class="circles__ring circles__ring--2">
+  <g class="circles__ring circles__n2">
     <circle cx={C[1].cx} cy={C[1].cy} r={R} stroke="currentColor" stroke-width={stroke} />
   </g>
-  <g class="circles__ring circles__ring--3">
+  <g class="circles__ring circles__n3">
     <circle cx={C[2].cx} cy={C[2].cy} r={R} stroke="currentColor" stroke-width={stroke} />
   </g>
 
   {
+    /* Το γέμισμα είναι ΑΜΕΤΑΚΙΝΗΤΟ ορθογώνιο, κομμένο από τους τρεις κύκλους.
+       Αν το ίδιο μετακινούνταν, το clip του (userSpaceOnUse) θα κληρονομούσε
+       κι αυτό τη μετατόπιση — και η τομή θα ξέφευγε από τους κύκλους. */
     fillCore && (
-      <circle
+      <rect
         class="circles__core"
-        cx={C[2].cx}
-        cy={C[2].cy}
-        r={R}
-        clip-path={`url(#${uid}-b)`}
+        x="0"
+        y="0"
+        width="200"
+        height="200"
+        clip-path={`url(#${uid}-c)`}
       />
-    )
-  }
-
-  {
-    labels && (
-      <g class="circles__labels">
-        {labels.map((l, i) => (
-          <text
-            x={labelPos[i].x}
-            y={labelPos[i].y}
-            text-anchor={labelPos[i].anchor}
-            class="circles__label"
-          >
-            {l}
-          </text>
-        ))}
-      </g>
     )
   }
 </svg>
 
 <style>
   .circles {
+    /* --cv: 0 → κύκλοι στη θέση τους· 1 → μαζεμένοι προς το κέντρο */
+    --cv: 0;
+    --cv-amp: 5;
+
     inline-size: 100%;
     block-size: auto;
     color: var(--c-olive);
@@ -123,27 +121,52 @@ const labelPos = [
     transform-origin: 100px 100px;
   }
 
-  .circles__label {
-    font-family: var(--font-ui);
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    fill: currentColor;
-    opacity: 0.72;
+  /* ---------------------------------------------------------------
+     Σύγκλιση: κάθε κόμβος κινείται προς το κοινό κέντρο (100, 109).
+     Μοναδιαία διανύσματα: n1 (0,1) · n2 (0.866,−0.5) · n3 (−0.866,−0.5)
+     --------------------------------------------------------------- */
+  .circles__n1 {
+    translate: 0 calc(var(--cv) * var(--cv-amp) * 1px);
   }
 
-  /* Αργή, σχεδόν ανεπαίσθητη κίνηση — κάθε κύκλος με δικό του ρυθμό */
-  .circles--drift .circles__ring--1 {
+  .circles__n2 {
+    translate: calc(var(--cv) * var(--cv-amp) * 0.866px)
+      calc(var(--cv) * var(--cv-amp) * -0.5px);
+  }
+
+  .circles__n3 {
+    translate: calc(var(--cv) * var(--cv-amp) * -0.866px)
+      calc(var(--cv) * var(--cv-amp) * -0.5px);
+  }
+
+  /* ---------------------------------------------------------------
+     Αργή κίνηση — η ίδια για τον κύκλο και για το clip του,
+     ώστε η τομή να μένει πάντα ευθυγραμμισμένη.
+     --------------------------------------------------------------- */
+  .circles--drift .circles__n1 {
     animation: drift-a var(--dur-amb-slow) var(--ease-in-out-soft) infinite;
   }
-  .circles--drift .circles__ring--2 {
+
+  .circles--drift .circles__n2 {
     animation: drift-b var(--dur-amb) var(--ease-in-out-soft) infinite;
   }
-  .circles--drift .circles__ring--3 {
+
+  .circles--drift .circles__n3 {
     animation: drift-c calc(var(--dur-amb) * 1.28) var(--ease-in-out-soft) infinite;
   }
+
   .circles--drift .circles__core {
     animation: core-breathe var(--dur-amb-slow) var(--ease-in-out-soft) infinite;
+  }
+
+  @keyframes core-breathe {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.68;
+    }
   }
 
   @keyframes drift-a {
@@ -176,20 +199,16 @@ const labelPos = [
     }
   }
 
-  @keyframes core-breathe {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.62;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .circles--drift .circles__ring,
+    .circles--drift .circles__n1,
+    .circles--drift .circles__n2,
+    .circles--drift .circles__n3,
     .circles--drift .circles__core {
       animation: none;
+    }
+
+    .circles {
+      --cv: 0 !important;
     }
   }
 </style>
