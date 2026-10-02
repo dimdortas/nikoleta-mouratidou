@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import RevealText from './ui/RevealText.astro';
-import { formats, contact, images } from '../data/site';
+import { formats, contact } from '../data/site';
+import { photos } from '../data/photos';
 ---
 
 <section class="fmt section is-cream" aria-labelledby="fmt-title">
@@ -34,14 +36,17 @@ import { formats, contact, images } from '../data/site';
       </article>
 
       <!-- Εικόνα ανάμεσα στα δύο -->
-      <figure class="fmt__media" data-reveal="fade" aria-hidden="true">
-        <img
-          src={`${images.light.src}?auto=format&fit=crop&w=760&h=1010&q=74`}
-          alt=""
-          width="760"
-          height="1010"
+      <figure class="fmt__media" data-reveal="scale">
+        <Image
+          src={photos.roomWide.src}
+          alt={photos.roomWide.alt}
+          widths={[420, 680, 1000]}
+          sizes="(min-width: 1024px) 24vw, (min-width: 768px) 32vw, 58vw"
+          format="webp"
+          quality={78}
           loading="lazy"
           decoding="async"
+          style={`--pos:${photos.roomWide.position}`}
           data-parallax="0.06"
         />
       </figure>
@@ -183,8 +188,9 @@ import { formats, contact, images } from '../data/site';
     inline-size: 100%;
     block-size: 108%;
     object-fit: cover;
+    object-position: var(--pos, 50% 50%);
     translate: 0 calc(var(--parallax-y, 0px) - 4%);
-    filter: saturate(0.82);
+    filter: saturate(0.94);
   }
 
   /* ---------------- breakpoints ---------------- */

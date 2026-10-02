@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import type { Photo } from '../../data/photos';
+
+/**
+ * Μία φωτογραφία μέσα σε μάσκα, με ήπιο parallax και αποκάλυψη.
+ * Η μάσκα ακολουθεί τη γλώσσα του σήματος: καμάρα, κύκλος ή έλλειψη.
+ */
+interface Props {
+  photo: Photo;
+  /** Σχήμα μάσκας */
+  shape?: 'arch' | 'circle' | 'ellipse' | 'soft';
+  /** Λόγος πλευρών του κάδρου */
+  ratio?: string;
+  /** Το `sizes` attribute — βοηθά τον browser να διαλέξει σωστό πλάτος */
+  sizes?: string;
+  /** Ένταση parallax· 0 = καθόλου */
+  parallax?: number;
+  /** Λεζάντα κάτω από την εικόνα */
+  caption?: string;
+  /** Φόρτωση με προτεραιότητα (μόνο για εικόνες πάνω από το fold) */
+  eager?: boolean;
+  class?: string;
+}
+
+const {
+  photo,
+  shape = 'soft',
+  ratio = '3 / 4',
+  sizes = '(min-width: 1024px) 40vw, (min-width: 768px) 46vw, 86vw',
+  parallax = 0.05,
+  caption,
+  eager = false,
+  class: className = '',
+} = Astro.props;
+---
+
+<figure class:list={['fig', `fig--${shape}`, className]}>
+  <div class="fig__frame" style={`--ratio:${ratio}`} data-reveal="scale">
+    <Image
+      class="fig__img"
+      src={photo.src}
+      alt={photo.alt}
+      widths={[480, 760, 1100, 1500]}
+      sizes={sizes}
+      format="webp"
+      quality={76}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding={eager ? 'sync' : 'async'}
+      style={`--pos:${photo.position ?? '50% 50%'}`}
+      data-parallax={parallax ? String(parallax) : undefined}
+    />
+  </div>
+
+  {
+    caption && (
+      <figcaption class="fig__caption" data-reveal>
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .fig {
+    position: relative;
+    margin: 0;
+  }
+
+  .fig__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--ratio, 3 / 4);
+    background-color: var(--c-ivory-warm);
+  }
+
+  .fig__img {
+    inline-size: 100%;
+    /* λίγο ψηλότερη από το κάδρο, ώστε το parallax να έχει χώρο */
+    block-size: 108%;
+    object-fit: cover;
+    object-position: var(--pos, 50% 50%);
+    translate: 0 calc(var(--parallax-y, 0px) - 4%);
+    /* διακριτικό ζέσταμα, ώστε οι φωτογραφίες να δένουν με το κρεμ */
+    filter: saturate(0.94) contrast(1.01);
+  }
+
+  /* ---------------- σχήματα ---------------- */
+  .fig--soft .fig__frame {
+    border-radius: var(--r-sm);
+  }
+
+  /* Καμάρα — στρογγυλή κορυφή, ίσια βάση */
+  .fig--arch .fig__frame {
+    border-radius: 999px 999px var(--r-sm) var(--r-sm);
+  }
+
+  .fig--circle .fig__frame {
+    border-radius: var(--r-circle);
+  }
+
+  .fig--ellipse .fig__frame {
+    border-radius: var(--r-circle);
+  }
+
+  /* ---------------- λεζάντα ---------------- */
+  .fig__caption {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-block-start: 1.1rem;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.1em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .fig__caption::before {
+    content: '';
+    flex: none;
+    inline-size: 1.75rem;
+    block-size: 1px;
+    margin-block-start: 0.72em;
+    background-color: var(--c-olive);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fig__img {
+      translate: 0 -4%;
+    }
+  }
+</style>

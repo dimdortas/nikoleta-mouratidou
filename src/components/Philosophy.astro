@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import RevealText from './ui/RevealText.astro';
-import { philosophy, images } from '../data/site';
+import { philosophy } from '../data/site';
+import { photos } from '../data/photos';
 ---
 
 <section class="phil section section--lg is-cream" id="filosofia" aria-labelledby="filosofia-title">
@@ -33,14 +35,18 @@ import { philosophy, images } from '../data/site';
       </blockquote>
     </figure>
 
-    <div class="phil__texture" data-reveal="fade" aria-hidden="true">
-      <img
-        src={`${images.linen.src}?auto=format&fit=crop&w=900&q=70`}
-        alt=""
-        width="900"
-        height="720"
+    <div class="phil__texture" data-reveal="scale">
+      <Image
+        src={photos.detail.src}
+        alt={photos.detail.alt}
+        widths={[360, 560, 860]}
+        sizes="(min-width: 1200px) 22vw, (min-width: 768px) 30vw, 62vw"
+        format="webp"
+        quality={78}
         loading="lazy"
         decoding="async"
+        style={`--pos:${photos.detail.position}`}
+        data-parallax="0.07"
       />
     </div>
   </div>
@@ -137,8 +143,6 @@ import { philosophy, images } from '../data/site';
     overflow: hidden;
     border-radius: var(--r-circle);
     aspect-ratio: 1;
-    mix-blend-mode: multiply;
-    opacity: 0.34;
   }
 
   /* Λεπτό περίγραμμα κύκλου που «δένει» την υφή με τη γλώσσα του σήματος */
@@ -153,8 +157,11 @@ import { philosophy, images } from '../data/site';
 
   .phil__texture img {
     inline-size: 100%;
-    block-size: 100%;
+    block-size: 110%;
     object-fit: cover;
+    object-position: var(--pos, 50% 50%);
+    translate: 0 calc(var(--parallax-y, 0px) - 5%);
+    filter: saturate(0.94);
   }
 
   /* ---------- ≥768px: ασύμμετρο editorial grid ---------- */

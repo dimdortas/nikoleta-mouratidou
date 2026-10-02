@@ -1,0 +1,220 @@
+---
+import RevealText from './ui/RevealText.astro';
+import Figure from './ui/Figure.astro';
+import { photos } from '../data/photos';
+---
+
+<section class="spc section section--lg" id="choros" aria-labelledby="choros-title">
+  <div class="spc__art" aria-hidden="true">
+    <span class="spc__ring" data-parallax="0.07"></span>
+  </div>
+
+  <div class="spc__inner shell shell--wide">
+    <header class="spc__head">
+      <p class="eyebrow" data-reveal>Ο χώρος</p>
+      <h2 class="spc__title" id="choros-title">
+        <RevealText text="Το γραφείο στη Θεσσαλονίκη" stagger={55} />
+      </h2>
+      <p class="spc__lead" data-reveal style="--reveal-delay:140ms">
+        Ιδιωτικό γραφείο, όπου πραγματοποιούνται συνεδρίες με παιδιά, εφήβους και ενήλικες,
+        καθώς και με ζευγάρια και οικογένειες.
+      </p>
+    </header>
+
+    <!-- Κύρια λήψη: ο χώρος των συνεδριών -->
+    <div class="spc__a">
+      <Figure
+        photo={photos.room}
+        shape="soft"
+        ratio="3 / 4"
+        parallax={0.05}
+        sizes="(min-width: 1024px) 38vw, (min-width: 768px) 48vw, 86vw"
+        caption="Ο χώρος των συνεδριών"
+      />
+    </div>
+
+    <!-- Λεπτομέρεια: βιβλιοθήκη, πιο χαμηλά για ρυθμό -->
+    <div class="spc__b">
+      <Figure
+        photo={photos.shelf}
+        shape="soft"
+        ratio="3 / 4"
+        parallax={0.09}
+        sizes="(min-width: 1024px) 26vw, (min-width: 768px) 38vw, 62vw"
+      />
+    </div>
+
+    <!-- Μικρή παύση κειμένου ανάμεσα στις εικόνες -->
+    <p class="spc__note" data-reveal>
+      Ο χώρος είναι σχεδιασμένος ώστε να είναι οικείος και ήσυχος — για ενήλικες, αλλά και για
+      παιδιά που χρειάζονται τη δική τους γωνιά.
+    </p>
+
+    <!-- Γωνιά παιδιών, πλατιά -->
+    <div class="spc__c">
+      <Figure
+        photo={photos.kids}
+        shape="soft"
+        ratio="4 / 3"
+        parallax={0.04}
+        sizes="(min-width: 1024px) 58vw, (min-width: 768px) 62vw, 86vw"
+        caption="Γωνιά για παιδιά και εφήβους"
+      />
+    </div>
+
+    <!-- Γραφείο συναντήσεων -->
+    <div class="spc__e">
+      <Figure
+        photo={photos.desk}
+        shape="soft"
+        ratio="4 / 3"
+        parallax={0.08}
+        sizes="(min-width: 1024px) 34vw, (min-width: 768px) 44vw, 86vw"
+        caption="Ο χώρος της συμβουλευτικής"
+      />
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .spc {
+    position: relative;
+    overflow: clip;
+  }
+
+  .spc__art {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .spc__ring {
+    position: absolute;
+    inline-size: min(46vw, 620px);
+    aspect-ratio: 1;
+    inset-block-start: 26%;
+    inset-inline-end: -18%;
+    border: 1px solid var(--c-olive);
+    border-radius: var(--r-circle);
+    opacity: 0.16;
+    translate: 0 var(--parallax-y, 0px);
+  }
+
+  .spc__inner {
+    position: relative;
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  /* ---------------- κεφαλίδα ---------------- */
+  .spc__head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+    max-inline-size: 42ch;
+  }
+
+  .spc__title {
+    font-size: var(--fs-h2);
+    line-height: 1.06;
+    letter-spacing: var(--ls-display);
+  }
+
+  .spc__lead {
+    font-size: var(--fs-lead);
+    line-height: 1.68;
+    color: var(--text-muted);
+    max-inline-size: 44ch;
+  }
+
+  /* ---------------- κείμενο ανάμεσα ---------------- */
+  .spc__note {
+    font-size: var(--fs-body);
+    line-height: 1.75;
+    color: var(--text-muted);
+    max-inline-size: 36ch;
+    padding-inline-start: 1.15rem;
+    border-inline-start: 1px solid var(--c-olive-mist);
+  }
+
+
+
+
+
+
+
+  /* ---------------- κινητό: απλή, ήρεμη ροή ---------------- */
+  .spc__b {
+    inline-size: 66%;
+  }
+
+  /* =============================================================
+     ≥768: ασύμμετρη editorial σύνθεση σε 12 στήλες.
+     Κάθε εικόνα έχει δική της σειρά/στήλες — καμία επικάλυψη με κείμενο.
+     ============================================================= */
+  @media (min-width: 768px) {
+    .spc__inner {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
+      row-gap: clamp(3rem, 7vw, 5.5rem);
+      align-items: start;
+    }
+
+    .spc__head {
+      grid-column: 1 / span 7;
+      grid-row: 1;
+    }
+
+    /* ΣΕΙΡΑ 2 — ο χώρος των συνεδριών + η βιβλιοθήκη, κατεβασμένη */
+    .spc__a {
+      grid-column: 1 / span 5;
+      grid-row: 2;
+    }
+
+    .spc__b {
+      grid-column: 7 / span 4;
+      grid-row: 2;
+      inline-size: 100%;
+      margin-block-start: clamp(3rem, 9vw, 7rem);
+    }
+
+    /* ΣΕΙΡΑ 3 — μόνο κείμενο, στη στήλη της βιβλιοθήκης */
+    .spc__note {
+      grid-column: 7 / span 5;
+      grid-row: 3;
+      margin-block-start: -1.5rem;
+    }
+
+    /* ΣΕΙΡΑ 4 — γωνιά παιδιών (πλατιά) και το γραφείο, κατεβασμένο */
+    .spc__c {
+      grid-column: 1 / span 7;
+      grid-row: 4;
+    }
+
+    .spc__e {
+      grid-column: 8 / span 5;
+      grid-row: 4;
+      margin-block-start: clamp(3rem, 10vw, 8rem);
+    }
+
+  }
+
+  @media (min-width: 1200px) {
+    .spc__head {
+      grid-column: 1 / span 6;
+    }
+
+    .spc__e {
+      grid-column: 8 / span 4;
+    }
+
+
+  }
+
+  @media (max-width: 767px) {
+    .spc__c {
+      margin-inline-end: calc(var(--gutter) * -1);
+    }
+  }
+</style>

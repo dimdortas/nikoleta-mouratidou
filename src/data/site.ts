@@ -366,26 +366,8 @@ export const form = {
 } as const;
 
 /* ---------- ΕΙΚΟΝΕΣ ----------
-   Προσωρινές εικόνες (Unsplash). Αντικαταστήστε τα `src` με τα τελικά
-   αρχεία — π.χ. '/images/about.jpg' — χωρίς άλλη αλλαγή στον κώδικα. */
-export const images = {
-  about: {
-    src: 'https://images.unsplash.com/photo-1578500467296-441a11d5d55a',
-    alt: 'Λινό ύφασμα που πέφτει απαλά σε ξύλινο δάπεδο, σε φυσικό φως.',
-  },
-  light: {
-    src: 'https://images.unsplash.com/photo-1760243790660-a7958d7843ee',
-    alt: 'Φυσικό φως που περνά μέσα από διάφανη κουρτίνα.',
-  },
-  arches: {
-    src: 'https://images.unsplash.com/photo-1524230572899-a752b3835840',
-    alt: 'Σειρά από καμάρες σε ήρεμο, φωτεινό εσωτερικό χώρο.',
-  },
-  linen: {
-    src: 'https://images.unsplash.com/photo-1528458909336-e7a0adfed0a5',
-    alt: '',
-  },
-} as const;
+   Οι πραγματικές φωτογραφίες του γραφείου ζουν στο `src/data/photos.ts`
+   και περνούν από το `astro:assets`. Δεν υπάρχουν πλέον placeholders. */
 
 /* ---------- SEO ---------- */
 export const seo = {

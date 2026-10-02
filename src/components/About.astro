@@ -1,24 +1,26 @@
 ---
+import { Image } from 'astro:assets';
 import RevealText from './ui/RevealText.astro';
-import { about, images, site } from '../data/site';
+import { about, site } from '../data/site';
+import { photos } from '../data/photos';
 import { keepSeparators } from '../lib/text';
 ---
 
 <section class="abt section section--lg" id="sxetika" aria-labelledby="sxetika-title">
   <div class="abt__inner shell shell--wide">
-    <!-- Εικόνα: προσωρινή, editorial — αντικαθίσταται από φωτογραφία -->
     <figure class="abt__media">
       <div class="abt__frame" data-reveal="scale">
-        <img
+        <Image
           class="abt__img"
-          src={`${images.about.src}?auto=format&fit=crop&w=1000&h=1330&q=76`}
-          srcset={`${images.about.src}?auto=format&fit=crop&w=560&h=745&q=76 560w, ${images.about.src}?auto=format&fit=crop&w=1000&h=1330&q=76 1000w`}
-          sizes="(min-width: 1024px) 42vw, (min-width: 768px) 46vw, 84vw"
-          alt={images.about.alt}
-          width="1000"
-          height="1330"
+          src={photos.portrait.src}
+          alt={photos.portrait.alt}
+          widths={[480, 760, 1086]}
+          sizes="(min-width: 1024px) 38vw, (min-width: 768px) 46vw, 84vw"
+          format="webp"
+          quality={80}
           loading="lazy"
           decoding="async"
+          style={`--pos:${photos.portrait.position}`}
           data-parallax="0.05"
         />
       </div>
@@ -98,7 +100,7 @@ import { keepSeparators } from '../lib/text';
     inline-size: 100%;
     block-size: 106%;
     object-fit: cover;
-    object-position: 50% 45%;
+    object-position: var(--pos, 50% 45%);
     translate: 0 calc(var(--parallax-y, 0px) - 3%);
     filter: saturate(0.88) contrast(1.02);
   }

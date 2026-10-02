@@ -13,7 +13,8 @@
     "deploy:pages": "npm run build:pages && node scripts/publish-pages.mjs"
   },
   "dependencies": {
-    "astro": "^4.16.19"
+    "astro": "^4.16.19",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
