@@ -1,0 +1,1 @@
+import{i as o,a as i,b as e}from"./form.DmpaENb0.js";import{i as n}from"./header.By1Yi8XX.js";const t=()=>{o(),i(),n(),e()};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",t,{once:!0}):t();
