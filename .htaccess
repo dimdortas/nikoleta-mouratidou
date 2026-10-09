@@ -7,6 +7,9 @@
 
 Options -Indexes
 
+# Δική μας σελίδα «δεν βρέθηκε» (src/pages/404.astro)
+ErrorDocument 404 /404.html
+
 # -------------------------------------------------------------
 # 1. HTTPS και www σε ΕΝΑ redirect
 #    Το canonical του site είναι https://www.nikoletamouratidou.gr

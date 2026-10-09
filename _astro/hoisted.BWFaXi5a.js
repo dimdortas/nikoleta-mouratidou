@@ -1,0 +1,1 @@
+import{i as o,a as i,b as e}from"./form.D7qnunrS.js";import{i as n}from"./CookieConsent.astro_astro_type_script_index_0_lang.u7jjfTcj.js";const t=()=>{o(),i(),n(),e()};document.readyState==="loading"?document.addEventListener("DOMContentLoaded",t,{once:!0}):t();
